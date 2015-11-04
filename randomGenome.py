@@ -27,8 +27,6 @@ for i in range(amount):
         if gene not in genome:
             genome.append(gene)
             
-    # print resulting genome TODO obsolete
-    print genome
     # write genome and newline to file
     genomeFile.write(str(genome))
     genomeFile.write("\n")

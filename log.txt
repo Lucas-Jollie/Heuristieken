@@ -1,0 +1,16 @@
+4 / 11/ 2015:
+
+randomSort.py was made
+average is ~105 inversions until melanogaster == miranad
+
+randomGenome.py made
+Creates output text file with n randomly generated sequences
+Used for testing alternative genomes.s
+
+intelSort1.py was also made
+wrongfull counting caused to solve genomes in 23 steps, always
+
+intelSort2.py as a better alterative
+Amount of steps to solve vary, original genome from heuristieken.nl
+done in 18 steps
+Random generated genome between 17 and 22 steps

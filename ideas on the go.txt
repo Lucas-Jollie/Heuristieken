@@ -1,0 +1,10 @@
+Must be able to be done in n * log(n), 35 in our case
+
+Check for continues sequences
+    log the sequence to track
+    
+OR
+invert lowest toward beginning
+OR
+
+
