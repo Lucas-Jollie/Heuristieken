@@ -10,7 +10,7 @@ inversions = 0
 leng = len(miran) - 1
 k = 0
 
-for k in range(0, 1000, 1):
+for k in range(0, 10000, 1):
     melan = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9]
     # repeat until genomes equal
     while melan != miran:
@@ -33,4 +33,4 @@ for k in range(0, 1000, 1):
 #            print melan
             
     # report amount of inversions
-print inversions/1000.0
+print inversions/10000.0
