@@ -20,7 +20,7 @@ def bubbleSort(a):
     changed = True
     while changed:
         changed = False
-        for i in xrange(len(a) - 1):
+        for i in range(len(a) - 1):
             if a[i] > a[i + 1]:
                 temp = a[i]
                 a[i] = a[i + 1]
@@ -35,7 +35,7 @@ def b3Sort(a):
     changed = True
     while changed:
         changed = False
-        for i in xrange(len(a) -2):
+        for i in range(len(a) -2):
             if a[i] > a[i + 2]:
                 temp = a[i]
                 a[i] = a[i + 2]
@@ -49,34 +49,45 @@ def b3Sort(a):
                 changed = True
     return count
 
-# An inversion version of insertion sort
-def insertionSort(a):
-    count = 0
-    for i in range(1, len(a)):
-        currentvalue = a[i]
-        position = i
-    while position > 0 and a[position - 1] > currentvalue:
-        a[position]=a[position - 1]
-        position = position - 1
-        a[position]= currentvalue
-        count += 1
-    return count
-
 # Inversion of size 2 at random places
 def randomBubbleSort(a):
     count = 0
-    changed = True
-    while changed:
-        changed = False
-        i = random.randint(0, len(a))
-        if a[i] > a[i + 1]:
-            temp = a[i]
-            a[i] = a[i + 1]
-            a[i + 1] = temp
-            count += 1
-            changed = True
-    return count
+    archive = []
+    while True:
+        i = random.randint(0, len(a) - 1)
+        print "i is:", i
+        j = i + 1
+        if i < j:
+            b = swap(a, i, j)
+            if b not in archive:
+                a = b
+                count += 1
+                archive.append(a)
+        if is_sorted(a):
+            return count
 
+# function to invert a piece of list a between two indices: i and j
+# range(chunk/2 + 1) is because you only need to swap half of the list!
+def swap(a, i, j):
+    if i > j:
+        tmp = i
+        i = j
+        j = tmp
+    chunk = j - i
+    for k in range(chunk/2 + 1):
+        temp = a[i]
+        a[i] = a[j]
+        a[j] = temp
+        i += 1
+        j -= 1
+    return a
+
+# function to check if list is sorted
+def is_sorted(list):
+    for i in range(0, len(list) - 1):
+        if list[i] > list[i + 1]:
+            return False
+    return True
 
 # checks ------------------------------------------------------------------------
 
@@ -88,11 +99,6 @@ print "New:", a,"\n"
 a = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
 print "Original:", a
 print "Number of bubbleSort steps (size 3):", b3Sort(a)
-print "New:", a,"\n"
-
-a = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
-print "Original:", a
-print "Number of insersion/inversions:", insertionSort(a)
 print "New:", a,"\n"
 
 a = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]

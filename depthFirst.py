@@ -12,7 +12,7 @@ class Fruitfly(object):
     def __init__(self, genome):
         """ Initializes genome as a list with particular size """
         self.genome = []
-
+        
     def GetSequence(self):
         """ Returns the current genome sequence """
         return self.genome
