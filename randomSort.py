@@ -10,14 +10,20 @@ inversions = 0
 leng = len(miran) - 1
 k = 0
 
-for k in range(0, 10000, 1):
+
+
+
+for k in range(0, 1, 1):
+
     melan = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9]
+        
     # repeat until genomes equal
     while melan != miran:
         
         # generates random indices of 0 <= i < j <= leng
         i = random.randint(0, leng - 1)
         j = random.randint((i + 1), leng)
+        
         
         # swaps if lower bound is greater than upper bound
         if melan[i] > melan[j]:
@@ -27,10 +33,10 @@ for k in range(0, 10000, 1):
                 melan[i] = temp
                 i += 1
                 j -= 1
+                
+
             inversions += 1
-            
-            # prints genome after inverting
-#            print melan
+            print melan
             
     # report amount of inversions
-print inversions/10000.0
+print inversions/1.0
