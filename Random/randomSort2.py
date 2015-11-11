@@ -11,7 +11,7 @@ def randomBubbleSort(a):
     archive = []
     while is_sorted(a) == False:
         i = random.randint(0, len(a) - 1)
-        j = random.randint(i, len(a) - 1)
+        j = random.randint(i + 1, len(a) - 1)
         if i < j:
             b = swap(a, i, j)
             if b not in archive:
