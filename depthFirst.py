@@ -12,12 +12,12 @@ class Fruitfly(object):
     def __init__(self, genome):
         """ Initializes genome as a list with particular size """
         self.genome = []
-        
+
     def GetSequence(self):
         """ Returns the current genome sequence """
         return self.genome
 
-# initialise archive maybe using pygtrie?
+# initialise archive maybe using pygtrie? list/hashtable
 class Archive(object):
     """ Represents a trie datastructure containing all past genomes """
     def __init__(self, rootnode):
@@ -43,7 +43,7 @@ def runSimulation():
         parent = stack.pop()
         c = GenerateAllChildren(parent)
         for i in range(c):
-            if (! archief.bevat(i)):
+            if (i not in archive):
                 archief.add(i)
             else:
                 if (i == solution):
