@@ -1,3 +1,4 @@
+
 # def sort(ins, i):
 #     if i == 0: return
 #     sort(ins, i-1)
@@ -131,7 +132,8 @@ solved_list = []
 #         i += 1
 #         print i
 
-# Brute force test 3
+# Extreem brute force test -----------------------------------------------------
+# maakt een random list en shuffelt deze totdat hij klopt
 from random import shuffle
 random_list = random.sample(xrange(1,6),5)
 start_time = time.time()
