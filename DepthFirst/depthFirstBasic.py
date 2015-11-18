@@ -8,7 +8,7 @@
 
 # initialise
 stack = []
-tree =
+tree = 
 graph.unmarkAllVertices
 vertex = rootVertex
 stack.push(vertex)

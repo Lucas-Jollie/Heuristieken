@@ -3,6 +3,7 @@
 #
 # File: randomSort2.py
 # Goal: explore random sorting
+# TODO: this version somehow doesn't work; randomSort.py does!!
 
 # random inversion sort functions -----------------------------------------------
 
