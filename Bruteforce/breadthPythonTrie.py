@@ -1,19 +1,23 @@
 # Groupname: Aardbeizonder
 # Names: Lucas Jollie, Bart Quaink, Anneke ter Schure
 #
-# File: breadthFirstBasic.py
 # Goal: find the best solution with the least amount of steps
+# Breadth first approach with bubble sort and a basic trie for archive
+#
+# NOTE: this version calculates average run times for solving random genomes
+# of a given size!
 # -------------------------------------------------------------------------------
 
 # imports
 import time
+import random
 import copy
 from pythontrie import Trie
 
-# initialise
+# initialise; NOTE: adjust number_of_runs and length of genome!
+number_of_runs = 50
+length = 8
 queue = []
-archive = Trie()
-start_time = time.time()
 
 class Node:
     def __init__(self, cargo=None, parent=None):
@@ -56,7 +60,7 @@ def runSimulation(start, solution):
     # stack = [3, 4, 5]
     # stack.append(6) --> [3, 4, 5, 6]
     # stack.pop() --> [3, 4, 5]
-
+    archive = Trie()
     solution_found = False
     pare_node = Node(start)
     queue.append(pare_node)
@@ -70,22 +74,19 @@ def runSimulation(start, solution):
                 archive.insert(str(c[i]))
                 queue.append(node)
             elif (c[i] == solution):
-                print "Solution: ", c[i]
+                # print "Solution: ", c[i]
                 solution_found = True
                 inversions = 0
                 while(node.prev != None):
-                    print node
+                    # print node
                     node = node.prev
                     inversions += 1
-                print "Inversions: ", inversions
+                # print "Inversions: ", inversions
 
-# starting point
-# start = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
-# solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
-# start = [4,2,3,1]
-# solution = [1,2,3,4]
-start = [4,2,3,1,6,11,10,9,8,7,5]
-solution = [1,2,3,4,5,6,7,8,9,10,11]
+start_time = time.time()
+for i in range(number_of_runs + 1):
+    start = random.sample(xrange(1, length + 1), length)
+    solution = sorted(start)
+    runSimulation(start, solution)
 
-runSimulation(start, solution)
-print "---", (time.time() - start_time), "seconds ---"
+print "---", (time.time() - start_time)/number_of_runs, "seconds ---"
