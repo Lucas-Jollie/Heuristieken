@@ -6,11 +6,14 @@
 # -------------------------------------------------------------------------------
 
 # imports
+import time
 import copy
+from pythontrie import Trie
 
 # initialise
 queue = []
-archive = []
+archive = Trie()
+start_time = time.time()
 
 class Node:
     def __init__(self, cargo=None, parent=None):
@@ -63,8 +66,8 @@ def runSimulation(start, solution):
         c = GenerateAllChildren(pare_node.cargo)
         for i in range(len(c)):
             node = Node(c[i], pare_node)
-            if (c[i] not in archive):
-                archive.append(c[i])
+            if (archive.search(str(c[i])) == False):
+                archive.insert(str(c[i]))
                 queue.append(node)
             elif (c[i] == solution):
                 print "Solution: ", c[i]
@@ -76,13 +79,13 @@ def runSimulation(start, solution):
                     inversions += 1
                 print "Inversions: ", inversions
 
-
 # starting point
 # start = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
 # solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
 # start = [4,2,3,1]
 # solution = [1,2,3,4]
-start = [4,2,3,1,6,8,7,5]
-solution = [1,2,3,4,5,6,7,8]
+start = [4,2,3,1,6,11,10,9,8,7,5]
+solution = [1,2,3,4,5,6,7,8,9,10,11]
 
 runSimulation(start, solution)
+print "---", (time.time() - start_time), "seconds ---"
