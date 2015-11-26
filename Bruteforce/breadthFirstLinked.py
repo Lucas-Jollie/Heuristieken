@@ -42,10 +42,8 @@ def GenerateAllChildren(parent):
         temp_parent[i + 1] = temp
         children.append(temp_parent)
 
-<<<<<<< HEAD
-=======
+
 #    print "Children: ", children
->>>>>>> 38bba6a0e8bd1489141b351b6f5511371e36826e
     return children
 
 
@@ -85,19 +83,12 @@ def runSimulation(start, solution):
 
 
 # starting point
-<<<<<<< HEAD
 # start = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
 # solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
-# start = [4,2,3,1]
-# solution = [1,2,3,4]
+#start = [4,2,3,1]
+#solution = [1,2,3,4]
 start = [4,2,3,1,6,8,7,5]
 solution = [1,2,3,4,5,6,7,8]
-=======
-#start = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
-#solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
-start = [4,7,2,10,3,5,8,6,1,9]
-solution = [1,2,3,4,5,6,7,8,9,10]
->>>>>>> 38bba6a0e8bd1489141b351b6f5511371e36826e
 
 runSimulation(start, solution)
 print "Time: ", time.time() - startTime
