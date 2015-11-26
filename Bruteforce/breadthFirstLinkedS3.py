@@ -25,11 +25,39 @@ class Node:
 def GenerateAllChildren(parent):
     """
     Generates all children of parent
-    Based on inversions of size 2
+    Based on inversions of size 3
     """
     children = []
     temp_parent = copy.copy(parent)
+    temp_parentInv = copy.copy(parent)
+    length = len(parent)
 
+    for i in range(length - 2):
+        if i != 0:
+            temp_parent = copy.copy(parent)
+            temp_parentInv = copy.copy(parent)
+#        if i == length - 1:
+#            return children
+        if ((i < length - 2)):
+            temp = temp_parent[i]
+            temp_parent[i] = temp_parent[i + 2]
+            temp_parent[i + 2] = temp
+        elif ((i == (length - 1) | i == (length - 2))):
+            temp = temp_parentInv[i]
+            temp_parentInv[i] = temp_parentInv[i-2]
+            temp_parent[i-2] = temp
+#        else:
+#            temp = temp_parent[i]
+
+#            temp_parent[i] = temp_parent[i + 1]
+#            temp_parent[i + 1] = temp
+        if temp_parent not in archive:
+            archive.append(temp_parent)
+            children.append(temp_parent)
+        elif temp_parentInv not in archive:
+            archive.append(temp_parentInv)
+            children.append(temp_parentInv)
+            
     for i in range(len(parent) - 1):
         if i != 0:
             temp_parent = copy.copy(parent)
@@ -37,10 +65,12 @@ def GenerateAllChildren(parent):
             return children
             
         temp = temp_parent[i]
-
         temp_parent[i] = temp_parent[i + 1]
         temp_parent[i + 1] = temp
-        children.append(temp_parent)
+        
+        if temp_parent not in archive:
+            archive.append(temp_parent)
+            children.append(temp_parent)
 
 #    print "Children: ", children
     return children
@@ -67,10 +97,10 @@ def runSimulation(start, solution):
         c = GenerateAllChildren(pare_node.cargo)
         for i in range(len(c)):
             node = Node(c[i], pare_node)
-            if (c[i] not in archive):
-                archive.append(c[i])
-                queue.append(node)
-            elif (c[i] == solution):
+            # moved archive to genallchilds, queue appending should still function here
+            queue.append(node)
+            
+            if (c[i] == solution):
                 print "Solution: ", c[i]
                 solution_found = True
                 inversions = 0
@@ -84,8 +114,11 @@ def runSimulation(start, solution):
 # starting point
 #start = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
 #solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
+#start = [4,2,3,1]
+#solution = [1,2,3,4]
 start = [4,7,2,10,3,5,8,6,1,9]
 solution = [1,2,3,4,5,6,7,8,9,10]
+
 
 runSimulation(start, solution)
 print "Time: ", time.time() - startTime
