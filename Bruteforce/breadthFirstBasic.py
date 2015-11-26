@@ -13,6 +13,7 @@ import copy
 queue = []
 archive = []
 path = []
+paths = open("path.txt", 'w')
 
 # def backtrace(parent, start, end):
 #     path = [end]
@@ -61,6 +62,8 @@ def runSimulation(start, solution):
     while (queue != [] and not solution_found):
         parent = queue.pop(0)
         path.append(parent)
+        paths.write(str(path))
+        paths.write("\n")
 
         c = GenerateAllChildren(parent)
         for i in range(len(c)):
@@ -76,7 +79,7 @@ def runSimulation(start, solution):
         print "queue: ", queue
         print "queue length: ", len(queue)
 
-    print path
+    print "path= ", path
 
 # starting point
 # Fruitfly.genome = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
