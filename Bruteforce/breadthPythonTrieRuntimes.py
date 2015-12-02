@@ -16,7 +16,7 @@ from pythontrie import Trie
 
 # initialise; NOTE: adjust number_of_runs and length of genome!
 number_of_runs = 50
-length = 8
+length = 10
 queue = []
 
 class Node:
@@ -83,13 +83,12 @@ def runSimulation(start, solution):
                     inversions += 1
                 # print "Inversions: ", inversions
 
-<<<<<<< HEAD
 start_time = time.time()
 for i in range(number_of_runs + 1):
     start = random.sample(xrange(1, length + 1), length)
     solution = sorted(start)
     runSimulation(start, solution)
-=======
+
 # starting point
 # start = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
 # solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
@@ -99,6 +98,5 @@ start = [4,2,3,1,6,8,7,5]
 solution = [1,2,3,4,5,6,7,8]
 #start = [4,2,3,1,6,11,10,9,8,7,5]
 #solution = [1,2,3,4,5,6,7,8,9,10,11]
->>>>>>> c4ef04b109373c059aeee065bb955fb1d39f8283
 
 print "---", (time.time() - start_time)/number_of_runs, "seconds ---"
