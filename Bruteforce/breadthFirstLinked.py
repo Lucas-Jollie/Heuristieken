@@ -3,26 +3,24 @@
 #
 # File: breadthFirstBasic.py
 # Goal: find the best solution with the least amount of steps
-#
-# this algorithm does find a solution but can't show us what the steps actually
-# are.... that's why we created BreadthFirstLinked.py which makes a graph
 # -------------------------------------------------------------------------------
 
 # imports
 import copy
+import time
 
 # initialise
 queue = []
 archive = []
-path = []
-paths = open("path.txt", 'w')
+startTime = time.time()
 
-# def backtrace(parent, start, end):
-#     path = [end]
-#     while path[-1] != start:
-#         path.append(parent[path[-1]])
-#     path.reverse()
-#     return path
+class Node:
+    def __init__(self, cargo=None, parent=None):
+        self.cargo = cargo
+        self.prev = parent
+
+    def __str__(self):
+        return str(self.cargo)
 
 def GenerateAllChildren(parent):
     """
@@ -37,12 +35,15 @@ def GenerateAllChildren(parent):
             temp_parent = copy.copy(parent)
         if i == len(temp_parent) - 1:
             return children
+            
         temp = temp_parent[i]
 
         temp_parent[i] = temp_parent[i + 1]
         temp_parent[i + 1] = temp
         children.append(temp_parent)
 
+
+#    print "Children: ", children
     return children
 
 
@@ -59,34 +60,35 @@ def runSimulation(start, solution):
     # stack.pop() --> [3, 4, 5]
 
     solution_found = False
-    queue.append(start)
+    pare_node = Node(start)
+    queue.append(pare_node)
 
     while (queue != [] and not solution_found):
-        parent = queue.pop(0)
-        path.append(parent)
-        paths.write(str(path))
-        paths.write("\n")
-
-        c = GenerateAllChildren(parent)
+        pare_node = queue.pop(0)
+        c = GenerateAllChildren(pare_node.cargo)
         for i in range(len(c)):
-            print "C[i]: ", c[i]
+            node = Node(c[i], pare_node)
             if (c[i] not in archive):
                 archive.append(c[i])
-                queue.append(c[i])
+                queue.append(node)
             elif (c[i] == solution):
                 print "Solution: ", c[i]
                 solution_found = True
-                break
+                inversions = 0
+                while(node.prev != None):
+                    print node
+                    node = node.prev
+                    inversions += 1
+                print "Inversions: ", inversions
 
-        print "queue: ", queue
-        print "queue length: ", len(queue)
-
-    print "path= ", path
 
 # starting point
-# Fruitfly.genome = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
+# start = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
 # solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
-start = [4,2,3,1]
-solution = [1,2,3,4]
+#start = [4,2,3,1]
+#solution = [1,2,3,4]
+start = [4,2,3,1,6,8,7,5]
+solution = [1,2,3,4,5,6,7,8]
 
 runSimulation(start, solution)
+print "Time: ", time.time() - startTime
