@@ -75,21 +75,6 @@ def GenerateAllChildren(parent):
             children.append(temp_parent)
     return children
 
-def seriesLength(genome):
-    """
-    returns the number of genes that are in a series (min length is 2)
-    """
-
-def geneDistance(genome):
-    """
-    returns the sum of the distance between the current place of a gene
-    and it's target location
-    """
-def geneTargets(genome):
-    """
-    returns the number of genes that are already at their target location
-    """
-
 
 def runSimulation(start, solution):
     """
