@@ -4,6 +4,8 @@
 # File: breadthFirstBasic.py
 # Goal: find the best solution with the least amount of steps
 #
+# this algorithm does find a solution but can't show us what the steps actually
+# are.... that's why we created BreadthFirstLinked.py which makes a graph
 # -------------------------------------------------------------------------------
 
 # imports
