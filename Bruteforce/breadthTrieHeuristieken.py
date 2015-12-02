@@ -28,7 +28,7 @@ class Node:
 
 def GenerateAllChildren(parent):
     """
-    Generates all children of parent
+    Generates all children of parent only
     Based on inversions of size 3
     """
     children = []
@@ -36,6 +36,7 @@ def GenerateAllChildren(parent):
     temp_parentInv = copy.copy(parent)
     length = len(parent)
 
+    # make children with inversions of size 3
     for i in range(length - 2):
         if i != 0:
             temp_parent = copy.copy(parent)
@@ -57,6 +58,7 @@ def GenerateAllChildren(parent):
                 archive.insert(str(strConvparentInv))
                 children.append(temp_parentInv)
 
+    # make children with inversions of size 2
     for i in range(len(parent) - 1):
         if i != 0:
             temp_parent = copy.copy(parent)
@@ -71,12 +73,24 @@ def GenerateAllChildren(parent):
         if (archive.search(str(strConvparent)) == False):
             archive.insert(str(strConvparent))
             children.append(temp_parent)
-
-# print "Children: ", children
     return children
 
+def seriesLength(genome):
+    """
+    returns the number of genes that are in a series (min length is 2)
+    """
 
-# algorithm
+def geneDistance(genome):
+    """
+    returns the sum of the distance between the current place of a gene
+    and it's target location
+    """
+def geneTargets(genome):
+    """
+    returns the number of genes that are already at their target location
+    """
+
+
 def runSimulation(start, solution):
     """
     Returns minumum number of time steps needed to get to solution
@@ -97,8 +111,6 @@ def runSimulation(start, solution):
         c = GenerateAllChildren(pare_node.cargo)
         for i in range(len(c)):
             node = Node(c[i], pare_node)
-#            if (archive.search(str(c[i])) == False):
-#                archive.insert(str(c[i]))
             queue.append(node)
             if (c[i] == solution):
                 print "Solution: ", c[i]
@@ -113,8 +125,8 @@ def runSimulation(start, solution):
 # starting point
 # start = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
 # solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
-#start = [4,2,3,1]
-#solution = [1,2,3,4]
+start = [4,2,3,1]
+solution = [1,2,3,4]
 #start = [4,2,3,1,6,8,7,5]
 #solution = [1,2,3,4,5,6,7,8]
 #start = [4,2,3,1,6,11,10,9,8,7,5]
