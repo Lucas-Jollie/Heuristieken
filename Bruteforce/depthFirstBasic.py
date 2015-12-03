@@ -9,7 +9,6 @@
 # initialise
 stack = []
 archive = []
-tree =
 graph.unmarkAllVertices
 vertex = rootVertex
 stack.push(vertex)
