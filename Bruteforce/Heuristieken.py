@@ -82,6 +82,17 @@ def geneTargets(genome):
         if (genome[i] == i + 1):
             numberCorrect += 1
     return numberCorrect
+    
+def axisScore(genome, axis):
+    plusScore = 0
+    minScore = 0
+    for i in range((len(genome) - 1)):
+        calc = genome[i] - axis + 1
+        if calc < 0:
+            minScore += genome[i] - axis + 1
+        elif calc > 0:
+            plusScore += genome[i] - axis + 1
+    if 
 
 
 test1 = [1,2,3,5,4]

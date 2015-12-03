@@ -26,6 +26,7 @@ class Node:
     def __str__(self):
         return str(self.cargo)
 
+
 def GenerateAllChildren(parent):
     """
     Generates all children of parent
