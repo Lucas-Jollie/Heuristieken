@@ -3,12 +3,15 @@
 #
 # File: breadthFirstBasic.py
 # Goal: find the best solution with the least amount of steps
+# selects for the best nodes with series
 # -------------------------------------------------------------------------------
 
 # imports
 import time
 import copy
+import heapq
 from pythontrie import Trie
+from Heuristieken import seriesScore
 
 # initialise
 queue = []
@@ -26,7 +29,8 @@ class Node:
     def __str__(self):
         return str(self.cargo)
 
-def GenerateAllChildren(parent):
+
+def generateAllChildren(parent):
     """
     Generates all children of parent
     Based on inversions of size 3
@@ -72,9 +76,27 @@ def GenerateAllChildren(parent):
             archive.insert(str(strConvparent))
             children.append(temp_parent)
 
-# print "Children: ", children
     return children
 
+def selectChildren(children):
+
+    scores = []
+    # calculate "fitness" scores
+    for i in range(len(children)):
+        s = seriesScore(children[i])
+        scores.append(s)
+
+    # check which 3 genomes have the best scores
+    dictionary = heapq.nlargest(3, zip(scores, children))
+
+    # put the best genomes in a list before returning
+    best_children = []
+    for j in range(len(dictionary)):
+        best_children.append(dictionary[j][1])
+
+    children = []
+    scores = []
+    return best_children
 
 # algorithm
 def runSimulation(start, solution):
@@ -94,11 +116,10 @@ def runSimulation(start, solution):
 
     while (queue != [] and not solution_found):
         pare_node = queue.pop(0)
-        c = GenerateAllChildren(pare_node.cargo)
+        children = generateAllChildren(pare_node.cargo)
+        c = selectChildren(children)
         for i in range(len(c)):
             node = Node(c[i], pare_node)
-#            if (archive.search(str(c[i])) == False):
-#                archive.insert(str(c[i]))
             queue.append(node)
             if (c[i] == solution):
                 print "Solution: ", c[i]
@@ -113,10 +134,8 @@ def runSimulation(start, solution):
 # starting point
 # start = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
 # solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
-#start = [4,2,3,1]
-#solution = [1,2,3,4]
-#start = [4,2,3,1,6,8,7,5]
-#solution = [1,2,3,4,5,6,7,8]
+start = [4,2,3,1,6,8,7,5]
+solution = [1,2,3,4,5,6,7,8]
 #start = [4,2,3,1,6,11,10,9,8,7,5]
 #solution = [1,2,3,4,5,6,7,8,9,10,11]
 

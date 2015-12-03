@@ -89,9 +89,11 @@ def runSimulation(start, solution):
     # stack.append(6) --> [3, 4, 5, 6]
     # stack.pop() --> [3, 4, 5]
 
+    leastSteps = 180
     pare_node = Node(start)
     stack.append(pare_node)
-    print "Inversions: ", findSolution()
+    answer = findSolution()
+    print "Inversions: ", answer
 
 
 def findSolution():
