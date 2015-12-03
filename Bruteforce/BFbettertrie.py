@@ -1,21 +1,28 @@
 # Groupname: Aardbeizonder
 # Names: Lucas Jollie, Bart Quaink, Anneke ter Schure
 #
-# File: breadthFirstBasic.py
+# File: BFbettertrie
 # Goal: find the best solution with the least amount of steps
 # selects for the best nodes with series
+# a better archive is implemented to reduce memory usage
+#
+# time and memory checks: http://www.huyng.com/posts/python-performance-analysis/
+# paste:  @profile above the code you want to check
+# for time check: $ kernprof.py -l -v 'breadthTrieS3 - Copy.py'
+#
 # -------------------------------------------------------------------------------
 
 # imports
 import time
 import copy
 import heapq
-from pythontrie import Trie
+from hat_trie import Trie # TODO: THIS DOESN'T WORK YET!
 from Heuristieken import seriesScore
 
 # initialise
 queue = []
 archive = Trie()
+
 start_time = time.time()
 
 class Node:
@@ -29,7 +36,7 @@ class Node:
     def __str__(self):
         return str(self.cargo)
 
-
+# @profile
 def generateAllChildren(parent):
     """
     Generates all children of parent
@@ -50,7 +57,6 @@ def generateAllChildren(parent):
             temp_parent[i + 2] = temp
             strConvparent = copy.copy(temp_parent)
             if (archive.search(str(strConvparent)) == False):
-                archive.insert(str(strConvparent))
                 children.append(temp_parent)
         elif ((i == (length - 1) | i == (length - 2))):
             temp = temp_parentInv[i]
@@ -58,7 +64,6 @@ def generateAllChildren(parent):
             temp_parentInv[i-2] = temp
             strConvparentInv = copy.copy(temp_parentInv)
             if (archive.search(str(strConvparentInv)) == False):
-                archive.insert(str(strConvparentInv))
                 children.append(temp_parentInv)
 
     for i in range(len(parent) - 1):
@@ -73,11 +78,15 @@ def generateAllChildren(parent):
         strConvparent = copy.copy(temp_parent)
 
         if (archive.search(str(strConvparent)) == False):
-            archive.insert(str(strConvparent))
             children.append(temp_parent)
 
-    return selectChildren(children)
+    best_children = selectChildren(children)
+    for j in range(len(best_children)):
+        archive.insert(str(best_children[j]))
 
+    return best_children
+
+# @profile
 def selectChildren(children):
 
     scores = []
@@ -99,7 +108,7 @@ def selectChildren(children):
     return best_children
 
 # algorithm
-@profile
+# @profile
 def runSimulation(start, solution):
     """
     Returns minumum number of time steps needed to get to solution
