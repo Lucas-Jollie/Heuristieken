@@ -117,7 +117,7 @@ def selectChildren(children):
         scores.append(s)
 
     # check which 3 genomes have the best scores
-    dictionary = heapq.nsmallest(3, zip(scores, children))
+    dictionary = heapq.nlargest(3, zip(scores, children))
 
     # put the best genomes in a list before returning
     best_children = []
@@ -139,22 +139,22 @@ def runSimulation(start, solution):
     pare_node = Node(start)
     queue.append(pare_node)
 
-    # pare_node = queue.pop(0)
-    # children = generateAllChildren(pare_node.cargo)
-    # c = selectChildren(children)
-    #
-    # for i in range(len(c)):
-    #     node = Node(c[i], pare_node)
-    #     queue.append(node)
-    #     if (c[i] == solution):
-    #         print "Solution: ", c[i]
-    #         solution_found = True
-    #         inversions = 0
-    #         while(node.prev != None):
-    #             print node
-    #             node = node.prev
-    #             inversions += 1
-    #         print "Inversions: ", inversions
+    pare_node = queue.pop(0)
+    children = generateAllChildren(pare_node.cargo)
+    c = selectChildren(children)
+
+    for i in range(len(c)):
+        node = Node(c[i], pare_node)
+        queue.append(node)
+        if (c[i] == solution):
+            print "Solution: ", c[i]
+            solution_found = True
+            inversions = 0
+            while(node.prev != None):
+                print node
+                node = node.prev
+                inversions += 1
+            print "Inversions: ", inversions
 
     print start
 
