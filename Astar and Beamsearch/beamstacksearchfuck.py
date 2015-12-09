@@ -15,7 +15,6 @@
 # Groupname: Aardbeizonder
 # Names: Lucas Jollie, Bart Quaink, Anneke ter Schure
 #
-# File: breadthFirstBasic.py
 # Goal: find the best solution with the least amount of steps
 # -------------------------------------------------------------------------------
 
@@ -23,14 +22,15 @@
 import time
 import copy
 from pythontrie import Trie
-# from Heuristieken import geneTargets
+from Heuristieken import seriesScore
 
-# initialise
+# initialise and define
 queue = []
 archive = []
 start_time = time.time()
 beam_width = 2
 correct_answers = []
+heuristic = seriesScore
 
 class Dictionary:
     def __init__(self,solution,inversions):
@@ -100,7 +100,7 @@ def GenerateAllChildren(parent):
 
 
 # algorithm
-def runSimulation(start, beam_width, solution):
+def runSimulation(start, beam_width, solution, heuristic):
     """
     Returns minumum number of time steps needed to get to solution
     """
@@ -117,15 +117,40 @@ def runSimulation(start, beam_width, solution):
     memory = []
     iterations = {}
 
+    pare_node = queue.pop(0)
+    c = GenerateAllChildren(pare_node.cargo)
+    for i in range(len(c)):
+        node = Node(c[i], pare_node)
+    # moved archive to genallchilds, queue appending should still function here
+    queue.append(node)
+
+    if (c[0] == solution):
+        print "Solution: ", c[0]
+        memory.append(c[0])
+        solution_found = True
+        inversions = 0
+        while(node.prev != None):
+            print node
+            node = node.prev
+            inversions += 1
+        print "Inversions: ", inversions
+        iterations[inversions] = memory
+        for key in iterations:
+            minimum = key
+            if key < minimum:
+                minimum = key
+                print minimum
+            print iterations
+
     while (queue != [] and not solution_found):
         pare_node = queue.pop(0)
         c = GenerateAllChildren(pare_node.cargo)
         for i in range(len(c)):
-            node = Node(c[:beam_width], pare_node)
+            node = Node(c[i], pare_node)
             # moved archive to genallchilds, queue appending should still function here
             queue.append(node)
 
-            if (c[:beam_width] == solution):
+            if (c[i] == solution):
                 print "Solution: ", c[i]
                 memory.append(c[i])
                 solution_found = True
@@ -155,5 +180,5 @@ solution = [1,2,3,4]
 #start = [4,2,3,1,6,11,10,9,8,7,5]
 #solution = [1,2,3,4,5,6,7,8,9,10,11]
 
-runSimulation(start, beam_width, solution)
+runSimulation(start, beam_width, solution,heuristic)
 print "---", (time.time() - start_time), "seconds ---"

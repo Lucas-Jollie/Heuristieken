@@ -15,6 +15,7 @@
 # Groupname: Aardbeizonder
 # Names: Lucas Jollie, Bart Quaink, Anneke ter Schure
 #
+# File: breadthFirstBasic.py
 # Goal: find the best solution with the least amount of steps
 # -------------------------------------------------------------------------------
 

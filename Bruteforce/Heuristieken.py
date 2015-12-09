@@ -7,6 +7,8 @@
 # bigger scores are better in these cases
 # ------------------------------------------------------------------------------
 
+# def breakPoints(genome):
+
 
 def seriesScore(genome):
     """
