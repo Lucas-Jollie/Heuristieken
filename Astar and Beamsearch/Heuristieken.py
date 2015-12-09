@@ -7,6 +7,8 @@
 # bigger scores are better in these cases
 # ------------------------------------------------------------------------------
 
+# def breakPoints(genome):
+
 
 def seriesScore(genome):
     """
@@ -14,13 +16,14 @@ def seriesScore(genome):
     divided by the number of series
     e.g. [1,2,3,5,4] returns 5 divided by 2
     """
-    totalLen = 0
+    totalLen = 0.0
     newseriesup = False
     newseriesdown = False
-    series = 0
-    serieLen = 0
+    series = 0.0
+    serieLen = 0.0
 
     for i in range(len(genome) - 1):
+
         # there is no current series
         if (newseriesup == False and newseriesdown == False):
             if (genome[i + 1] == genome[i] + 1):
@@ -31,8 +34,6 @@ def seriesScore(genome):
                 series += 1
                 newseriesdown = True
                 serieLen = 2
-            else:
-                series += 1
 
         # the current series is going up
         elif (newseriesup == True):
@@ -52,13 +53,14 @@ def seriesScore(genome):
                 serieLen = 0
                 newseriesdown = False
 
-    if (series == 0 or totalLen == 0):
+    totalLen += series # each serie is at least 2 big so need to add 1 for each series
+
+    if (totalLen == 0):
         return 0
     elif (serieLen == len(genome)):
-        return serieLen, series
+        return serieLen / series
 
-    totalLen += series # each serie is at least 2 big so need to add 1 for each series
-    return totalLen, series
+    return totalLen / series
 
 def geneDistance(genome):
     """
@@ -67,7 +69,6 @@ def geneDistance(genome):
     """
     distanceSum = 0
     for i in range(len(genome)):
-        # if (genome[i] < i + 1):
         distance = abs(genome[i] - (i + 1))
         distanceSum += distance
     return -distanceSum
@@ -84,11 +85,22 @@ def geneTargets(genome):
             numberCorrect += 1
     return numberCorrect
 
+# def axisScore(genome, axis):
+#     plusScore = 0
+#     minScore = 0
+#     for i in range((len(genome) - 1)):
+#         calc = genome[i] - axis + 1
+#         if calc < 0:
+#             minScore += genome[i] - axis + 1
+#         elif calc > 0:
+#             plusScore += genome[i] - axis + 1
+#     if
 
-test1 = [1,2,3,5,4]
-test2 = [1,3,5,2,4]
-test3 = [5,4,3,2,1]
-# 
+#################################################################################
+# test1 = [1,2,3,5,4]
+# test2 = [1,3,5,2,4]
+# test3 = [5,4,3,2,1]
+
 # print "seriesScore 1: ", seriesScore(test1) # should return 5 / 2
 # print "seriesScore 2: ", seriesScore(test2) # should give no series and no length
 # print "seriesScore 3: ", seriesScore(test3) # should give 5 / 1
