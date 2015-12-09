@@ -88,15 +88,15 @@ def geneTargets(genome):
 test1 = [1,2,3,5,4]
 test2 = [1,3,5,2,4]
 test3 = [5,4,3,2,1]
-
-print "seriesScore 1: ", seriesScore(test1) # should return 5 / 2
-print "seriesScore 2: ", seriesScore(test2) # should give no series and no length
-print "seriesScore 3: ", seriesScore(test3) # should give 5 / 1
-
-print "getTargets 1: ", geneTargets(test1) # should return 3
-print "getTargets 2: ", geneTargets(test2) # should return 1
-print "getTargets 3: ", geneTargets(test3) # should return 1
-
-print "geneDistance 1: ", geneDistance(test1) # should return -2
-print "geneDistance 2: ", geneDistance(test2) # should return -6
-print "geneDistance 3: ", geneDistance(test3) # should return -12
+# 
+# print "seriesScore 1: ", seriesScore(test1) # should return 5 / 2
+# print "seriesScore 2: ", seriesScore(test2) # should give no series and no length
+# print "seriesScore 3: ", seriesScore(test3) # should give 5 / 1
+#
+# print "getTargets 1: ", geneTargets(test1) # should return 3
+# print "getTargets 2: ", geneTargets(test2) # should return 1
+# print "getTargets 3: ", geneTargets(test3) # should return 1
+#
+# print "geneDistance 1: ", geneDistance(test1) # should return -2
+# print "geneDistance 2: ", geneDistance(test2) # should return -6
+# print "geneDistance 3: ", geneDistance(test3) # should return -12
