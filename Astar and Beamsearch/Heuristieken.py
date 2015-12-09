@@ -100,7 +100,7 @@ def geneTargets(genome):
 # test1 = [1,2,3,5,4]
 # test2 = [1,3,5,2,4]
 # test3 = [5,4,3,2,1]
-
+#
 # print "seriesScore 1: ", seriesScore(test1) # should return 5 / 2
 # print "seriesScore 2: ", seriesScore(test2) # should give no series and no length
 # print "seriesScore 3: ", seriesScore(test3) # should give 5 / 1

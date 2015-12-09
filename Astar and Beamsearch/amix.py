@@ -80,10 +80,6 @@ def generateAllChildren(parent):
         if (archive.search(str(strConvparent)) == False):
             children.append(temp_parent)
 
-    # best_children = selectChildren(children)
-    # for j in range(len(best_children)):
-    #     archive.insert(str(best_children[j]))
-
     for j in range(len(children)):
         archive.insert(str(children[j]))
 
@@ -95,11 +91,11 @@ def selectChildren(children):
     scores = []
     # calculate "fitness" scores
     for i in range(len(children)):
-        s = seriesScore(children[i])
+        s = 1 - (seriesScore(children[i])/len(start))
         scores.append(s)
 
     # check which 3 genomes have the best scores
-    dictionary = heapq.nlargest(3, zip(scores, children))
+    dictionary = heapq.nsmallest(3, zip(scores, children))
 
     # put the best genomes in a list before returning
     best_children = []
@@ -146,8 +142,8 @@ def runSimulation(start, solution):
 # start = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
 # solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
 
-start = [4,1,2,3]
-solution = [1,2,3,4]
+# start = [4,1,2,3]
+# solution = [1,2,3,4]
 
 ## size: 8 ##
 # start = [4,2,3,1,6,8,7,5]
@@ -162,8 +158,8 @@ solution = [1,2,3,4]
 # solution = [1,2,3,4,5,6,7,8,9,10]
 
 ## size: 11 ##
-# start = [4,2,3,1,6,11,10,9,8,7,5]
-# solution = [1,2,3,4,5,6,7,8,9,10,11]
+start = [4,2,3,1,6,11,10,9,8,7,5]
+solution = [1,2,3,4,5,6,7,8,9,10,11]
 
 runSimulation(start, solution)
 print "---", (time.time() - start_time), "seconds ---"
