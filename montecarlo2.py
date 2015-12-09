@@ -9,7 +9,8 @@ import time
 # ask amount of genomes to generate
 amount = input("How many genomes? ")
 
-totalInversions = 0.0
+totalInversions = 0
+totalRuns = 0
 
 for k in range(amount):
 
@@ -30,18 +31,14 @@ for k in range(amount):
 
     # loop until equal
     while melan != miran:
-
         # loops for length of genome
         for i in range(0, leng + 1, 1):
-
             # checks if value in string equals place of runth place in genome
             if (melan[i] == runs + 1):
-
                 j = runs
 
                 # checks if current gene not in right place of genome
                 if (melan[i] != (i + 1)):
-
                     # swapping algorithm
                     while i > j:
                         temp = melan[j]
@@ -49,38 +46,35 @@ for k in range(amount):
                         melan[i] = temp
                         i -= 1
                         j += 1
-
-
                     # update amount of inversions and times run through string
                     inversions += 1
                     pY.append(inversions)
                     runs += 1
                     pX.append(runs)
 
-
-
                 # updates if is in place
                 else:
                     runs += 1
 
-            # visual representation of progress
-            # if melan != miran:
-                # print
-            #     print runs
-            #     print melan
-            # print i, j
-            # print
-
-        # ensures loop starts after alreay ordened genes
         i = j
 
-    totalInversions += inversions
+    totalRuns += (runs / amount)
+    totalInversions += (inversions / amount)
     plt.plot(pX, pY)
+
+    leastamount = pX[-1]
+
+    if pX[-1] <= leastamount:
+        leastamount = pX[-1]
+
+    # print totalRuns
+    # print totalInversions
 
 
     # print "Inversions: " + str(inversions)
     # print "Solved Melanogaster: " + str(melan)
 
+print leastamount
 plt.ylabel('# of inversions')
 plt.xlabel('# of runs')
 plt.show()

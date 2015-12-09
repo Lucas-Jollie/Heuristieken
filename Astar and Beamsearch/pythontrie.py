@@ -9,7 +9,7 @@ class TrieNode:
     # Initialize your data structure here.
     def __init__(self):
         self.val = None
-        self.pointers = {}
+        self.pointers={}
 
 class Trie:
 

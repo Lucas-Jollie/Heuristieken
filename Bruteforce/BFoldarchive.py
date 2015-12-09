@@ -4,19 +4,22 @@
 # File: breadthFirstBasic.py
 # Goal: find the best solution with the least amount of steps
 # selects for the best nodes with series
+#
+# time and memory checks: http://www.huyng.com/posts/python-performance-analysis/
+# paste:  @profile above the code you want to check
+# for time check: $ kernprof -l -v 'BFoldarchive.py' > timerBFoldarchive.txt
+#
 # -------------------------------------------------------------------------------
 
 # imports
 import time
 import copy
 import heapq
-from pythontrie import Trie
 from Heuristieken import seriesScore
 
 # initialise
-fittest = input("Number of surviving children: ")
 queue = []
-archive = Trie()
+archive = []
 start_time = time.time()
 
 class Node:
@@ -30,7 +33,7 @@ class Node:
     def __str__(self):
         return str(self.cargo)
 
-
+@profile
 def generateAllChildren(parent):
     """
     Generates all children of parent
@@ -41,26 +44,24 @@ def generateAllChildren(parent):
     temp_parentInv = copy.copy(parent)
     length = len(parent)
 
-#    for i in range(length - 2):
-#        if i != 0:
-#            temp_parent = copy.copy(parent)
-#            temp_parentInv = copy.copy(parent)
-#        if ((i < length - 2)):
-#            temp = temp_parent[i]
-#            temp_parent[i] = temp_parent[i + 2]
-#            temp_parent[i + 2] = temp
-#            strConvparent = copy.copy(temp_parent)
-#            if (archive.search(str(strConvparent)) == False):
-#                archive.insert(str(strConvparent))
-#                children.append(temp_parent)
-#        elif ((i == (length - 1) | i == (length - 2))):
-#            temp = temp_parentInv[i]
-#            temp_parentInv[i] = temp_parentInv[i-2]
-#            temp_parentInv[i-2] = temp
-#            strConvparentInv = copy.copy(temp_parentInv)
-#            if (archive.search(str(strConvparentInv)) == False):
-#                archive.insert(str(strConvparentInv))
-#                children.append(temp_parentInv)
+    for i in range(length - 2):
+        if i != 0:
+            temp_parent = copy.copy(parent)
+            temp_parentInv = copy.copy(parent)
+        if ((i < length - 2)):
+            temp = temp_parent[i]
+            temp_parent[i] = temp_parent[i + 2]
+            temp_parent[i + 2] = temp
+            strConvparent = copy.copy(temp_parent)
+            if (str(strConvparent) not in archive):
+                children.append(temp_parent)
+        elif ((i == (length - 1) | i == (length - 2))):
+            temp = temp_parentInv[i]
+            temp_parentInv[i] = temp_parentInv[i-2]
+            temp_parentInv[i-2] = temp
+            strConvparentInv = copy.copy(temp_parentInv)
+            if (str(strConvparentInv) not in archive):
+                children.append(temp_parentInv)
 
     for i in range(len(parent) - 1):
         if i != 0:
@@ -73,12 +74,16 @@ def generateAllChildren(parent):
         temp_parent[i + 1] = temp
         strConvparent = copy.copy(temp_parent)
 
-        if (archive.search(str(strConvparent)) == False):
-            archive.insert(str(strConvparent))
+        if (str(strConvparent) not in archive):
             children.append(temp_parent)
 
-    return selectChildren(children)
+    best_children = selectChildren(children)
+    for j in range(len(best_children)):
+        archive.append(str(best_children[j]))
 
+    return best_children
+
+@profile
 def selectChildren(children):
 
     scores = []
@@ -86,16 +91,9 @@ def selectChildren(children):
     for i in range(len(children)):
         s = seriesScore(children[i])
         scores.append(s)
-        
-    if (fittest == 1):
-        return children[scores.index(max(scores))]
 
     # check which 3 genomes have the best scores
-<<<<<<< HEAD
-    dictionary = heapq.nlargest(fittest, zip(scores, children))
-=======
     dictionary = heapq.nlargest(2, zip(scores, children))
->>>>>>> e935641a364e5fbfff0bb74a88161d373d2741c6
 
     # put the best genomes in a list before returning
     best_children = []
@@ -133,17 +131,6 @@ def runSimulation(start, solution):
                     inversions += 1
                 print "Inversions: ", inversions
 
-<<<<<<< HEAD
-# starting point
-#start = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
-#solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
-#start = [4,2,3,1,6,8,7,5]
-#solution = [1,2,3,4,5,6,7,8]
-start=[4,3,2,1]
-solution=[1,2,3,4]
-#start = [4,2,3,1,6,11,10,9,8,7,5]
-#solution = [1,2,3,4,5,6,7,8,9,10,11]
-=======
 # starting points ##############################################################
 # start = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
 # solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
@@ -163,7 +150,6 @@ solution = [1,2,3,4,5,6,7,8,9]
 ## size: 11 ##
 # start = [4,2,3,1,6,11,10,9,8,7,5]
 # solution = [1,2,3,4,5,6,7,8,9,10,11]
->>>>>>> e935641a364e5fbfff0bb74a88161d373d2741c6
 
 runSimulation(start, solution)
 print "---", (time.time() - start_time), "seconds ---"

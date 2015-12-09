@@ -1,18 +1,40 @@
+# beamSearch(problemSet, ruleSet, memorySize):
+#     openMemory = new memory of size memorySize
+#     nodeList = problemSet.listOfNodes
+#     node = root or initial search node
+#     Add node to openMemory;
+#     while (node is not a goal node)
+#          Delete node from openMemory;
+#          Expand node and obtain its children, evaluate those children;
+#          If a child node is pruned according to a rule in ruleSet, delete it;
+#          Place remaining, non-pruned children into openMemory;
+#          If memory is full and has no room for new nodes, remove the worst
+#              node, determined by ruleSet, in openMemory;
+#          node = the least costly node in openMemory;
+
 # Groupname: Aardbeizonder
 # Names: Lucas Jollie, Bart Quaink, Anneke ter Schure
 #
-# File: breadthFirstBasic.py
 # Goal: find the best solution with the least amount of steps
 # -------------------------------------------------------------------------------
 
 # imports
-import copy
 import time
+import copy
+from pythontrie import Trie
+# from Heuristieken import geneTargets
 
 # initialise
 queue = []
 archive = []
-startTime = time.time()
+start_time = time.time()
+beam_width = 2
+correct_answers = []
+
+class Dictionary:
+    def __init__(self,solution,inversions):
+        self.solution = solution
+        self.inversions = inversions
 
 class Node:
     def __init__(self, cargo=None, parent=None):
@@ -77,7 +99,7 @@ def GenerateAllChildren(parent):
 
 
 # algorithm
-def runSimulation(start, solution):
+def runSimulation(start, beam_width, solution):
     """
     Returns minumum number of time steps needed to get to solution
     """
@@ -91,6 +113,8 @@ def runSimulation(start, solution):
     solution_found = False
     pare_node = Node(start)
     queue.append(pare_node)
+    memory = []
+    iterations = {}
 
     while (queue != [] and not solution_found):
         pare_node = queue.pop(0)
@@ -102,6 +126,7 @@ def runSimulation(start, solution):
 
             if (c[i] == solution):
                 print "Solution: ", c[i]
+                memory.append(c[i])
                 solution_found = True
                 inversions = 0
                 while(node.prev != None):
@@ -109,6 +134,14 @@ def runSimulation(start, solution):
                     node = node.prev
                     inversions += 1
                 print "Inversions: ", inversions
+                iterations[inversions] = memory
+                for key in iterations:
+                    minimum = key
+                    if key < minimum:
+                        minimum = key
+                        print minimum
+                    print iterations
+
 
 
 # starting point
@@ -116,11 +149,10 @@ def runSimulation(start, solution):
 # solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
 start = [4,2,3,1]
 solution = [1,2,3,4]
-# start = [4,2,3,1,6,8,7,5]
-# solution = [1,2,3,4,5,6,7,8]
-# solution = [1,2,3,4,5,6,7,8,9,10]
-# start = [4,7,2,10,3,5,8,6,1,9]
+#start = [4,2,3,1,6,8,7,5]
+#solution = [1,2,3,4,5,6,7,8]
+#start = [4,2,3,1,6,11,10,9,8,7,5]
+#solution = [1,2,3,4,5,6,7,8,9,10,11]
 
-
-runSimulation(start, solution)
-print "Time: ", time.time() - startTime
+runSimulation(start, beam_width, solution)
+print "---", (time.time() - start_time), "seconds ---"
