@@ -1,5 +1,5 @@
 import random
-genomeFile = open("kortrandom.txt", 'w')
+genomeFile = open("100randomgenomes.txt", 'w')
 
 for i in range(0,100):
     random_list = random.sample(xrange(1,26),25)

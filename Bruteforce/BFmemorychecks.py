@@ -7,7 +7,7 @@
 #
 # time and memory checks: http://www.huyng.com/posts/python-performance-analysis/
 # paste:  @profile above the code you want to check
-# for time check: $ kernprof.py -l -v 'breadthTrieS3 - Copy.py'
+# for time check: $ kernprof -l -v 'BFmemorychecks.py' > timerBFmemorychecks.txt
 #
 # -------------------------------------------------------------------------------
 
@@ -35,7 +35,7 @@ class Node:
     def __str__(self):
         return str(self.cargo)
 
-# @profile
+@profile
 def generateAllChildren(parent):
     """
     Generates all children of parent
@@ -85,7 +85,7 @@ def generateAllChildren(parent):
 
     return best_children
 
-# @profile
+@profile
 def selectChildren(children):
 
     scores = []
@@ -107,7 +107,7 @@ def selectChildren(children):
     return best_children
 
 # algorithm
-# @profile
+@profile
 def runSimulation(start, solution):
     """
     Returns minumum number of time steps needed to get to solution
