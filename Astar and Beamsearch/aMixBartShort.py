@@ -1,8 +1,9 @@
 # Groupname: Aardbeizonder
 # Names: Lucas Jollie, Bart Quaink, Anneke ter Schure
 #
-# File: amix.py
-# A mix of beam and astar; uses a priority queue!
+# A mix of beam and astar; uses a priority queue! and doesn't stop when solution found!
+# only prints best solution!
+# TODO: adjust beamwidth (called beam)
 #
 # time and memory checks: http://www.huyng.com/posts/python-performance-analysis/
 # paste:  @profile above the code you want to check
@@ -21,6 +22,10 @@ from heapq import *
 # initialise
 queue = []
 archive = Trie()
+
+#TODO adjust: ########################
+beam = 2
+######################################
 
 start_time = time.time()
 
@@ -58,9 +63,11 @@ def generateAllChildren(parent):
                     begin += 1
                     end -= 1
                 string_parent = copy.copy(temp_parent)
+
                 if (archive.search(str(string_parent)) == False):
                     children.append(temp_parent)
-                    archive.insert(str(temp_parent))
+                    if (str(string_parent) != str(stringsol)):
+                        archive.insert(str(string_parent))
 
     # print children
     return children
@@ -71,11 +78,11 @@ def selectChildren(children):
     scores = []
     # calculate "fitness" scores
     for i in range(len(children)):
-        s = 1 - bart(children[i])
+        s = bart(children[i])
         scores.append(s)
 
     # check which 3 genomes have the best scores
-    dictionary = heapq.nsmallest(2, zip(scores, children))
+    dictionary = heapq.nsmallest(beam, zip(scores, children))
 
     # put the best genomes in a list before returning
     best_children = []
@@ -92,13 +99,14 @@ def runSimulation(start, solution):
     """
     Returns minumum number of time steps needed to get to solution
     """
-
-    solution_found = False
+    solutionNodes = []
+    lowest = 15
     pare_node = Node(start)
     m = (0, pare_node)
     heappush(queue, m)
+    solution_found = False
 
-    while (queue != [] and not solution_found):
+    while (queue != [] and (solution_found == False)):
         pare_node = heappop(queue)
         children = generateAllChildren(pare_node[1].cargo)
 
@@ -107,7 +115,10 @@ def runSimulation(start, solution):
             score = bart(c[i])
             node = Node(c[i], pare_node[1])
             l = (score, node)
-            heappush(queue, l)
+            if (len(queue) <= 50):
+                heappush(queue, l)
+            else:
+                heappushpop(queue, l)
             if (c[i] == solution):
                 print "Solution: ", c[i]
                 solution_found = True
@@ -118,23 +129,27 @@ def runSimulation(start, solution):
                     inversions += 1
                 print "Inversions: ", inversions
 
-# starting points ##############################################################
-# start = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
-# solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
 
-#start = [2,1,4,3]
-#solution = [1,2,3,4]
+# starting points ##############################################################
+start = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
+solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
+
+# start = [2,1,4,3]
+# solution = [1,2,3,4]
 
 # start = [1,2,3,5,6,4]
 # solution = [1,2,3,4,5,6]
 
+# start = [1,2,7,3,5,6,4]
+# solution = [1,2,3,4,5,6,7]
+
 ## size: 8 ##
-# start = [4,2,3,1,6,8,7,5]
-# solution = [1,2,3,4,5,6,7,8]
+#start = [4,2,3,1,6,8,7,5]
+#solution = [1,2,3,4,5,6,7,8]
 
 ## size: 9 ##
-start = [1,2,3,4,6,8,9,7,5]
-solution = [1,2,3,4,5,6,7,8,9]
+# start = [1,2,3,4,6,8,9,7,5]
+# solution = [1,2,3,4,5,6,7,8,9]
 
 ## size: 10 ##
 # start = [4,2,3,1,10,6,8,9,7,5]
@@ -143,6 +158,8 @@ solution = [1,2,3,4,5,6,7,8,9]
 ## size: 11 ##
 # start = [4,2,3,1,6,11,10,9,8,7,5]
 # solution = [1,2,3,4,5,6,7,8,9,10,11]
+
+stringsol = copy.copy(solution)
 
 runSimulation(start, solution)
 print "---", (time.time() - start_time), "seconds ---"
