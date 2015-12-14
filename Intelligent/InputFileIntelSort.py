@@ -5,18 +5,18 @@ import ast
 # open output and input files
 steps = open("100genomesSwap.txt", 'w')
 f = open("100randomgenomes.txt", "r")
+counter = 0
 
 for row in f.readlines():
     totalInversions = 0.0
-    k = 0
+
     # assigne values of genomes
-    preprow = row[:-1]
+    preprow = row[:-2]
     preprow = preprow[1:]
     melan = preprow.split(', ')
-    melan = [int(i) for i in melan]
+    melan = map(int, melan)
     miran = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
     print melan
-    print type(melan)
 
     # definitions
     inversions = 0
@@ -27,8 +27,8 @@ for row in f.readlines():
 
     # writes start of trial
     steps.write("#")
-    steps.write(str(k))
-    steps.write(" Original: ")
+    steps.write(str(counter))
+    steps.write(",")
     for i in range(len(melan)):
         steps.write(str(melan[i]))
         steps.write(",")
@@ -78,14 +78,10 @@ for row in f.readlines():
         # ensures loop starts after alreay ordened genes
         i = j
 
-    # steps.write("Total number of inversions: ")
+    steps.write("Total number of inversions: ")
     steps.write(str(inversions))
     steps.write("\n")
-    totalInversions += inversions
-    k += 1
+    counter += 1
 
     print "Inversions: " + str(inversions)
     print "Solved Melanogaster: " + str(melan)
-
-    steps.write("Mean inversions: ")
-    steps.write(str(totalInversions / amount))

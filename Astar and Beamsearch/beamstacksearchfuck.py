@@ -1,43 +1,33 @@
-# beamSearch(problemSet, ruleSet, memorySize):
-#     openMemory = new memory of size memorySize
-#     nodeList = problemSet.listOfNodes
-#     node = root or initial search node
-#     Add node to openMemory;
-#     while (node is not a goal node)
-#          Delete node from openMemory;
-#          Expand node and obtain its children, evaluate those children;
-#          If a child node is pruned according to a rule in ruleSet, delete it;
-#          Place remaining, non-pruned children into openMemory;
-#          If memory is full and has no room for new nodes, remove the worst
-#              node, determined by ruleSet, in openMemory;
-#          node = the least costly node in openMemory;
-
 # Groupname: Aardbeizonder
 # Names: Lucas Jollie, Bart Quaink, Anneke ter Schure
 #
-# Goal: find the best solution with the least amount of steps
+# File: beam.py
+# breadthfist but focused on 1 best child per parent
+#
+# time and memory checks: http://www.huyng.com/posts/python-performance-analysis/
+# paste:  @profile above the code you want to check
+# for time check: $ kernprof -l -v 'beam2.py' > timerbeam2.txt
+#
 # -------------------------------------------------------------------------------
 
 # imports
 import time
 import copy
+import heapq
 from pythontrie import Trie
 from Heuristieken import seriesScore
+from heapq import *
 
-# initialise and define
+# initialise
 queue = []
-archive = []
-start_time = time.time()
-beam_width = 2
-correct_answers = []
-heuristic = seriesScore
+archive = Trie()
 
-class Dictionary:
-    def __init__(self,solution,inversions):
-        self.solution = solution
-        self.inversions = inversions
+start_time = time.time()
 
 class Node:
+    """
+    creates nodes for the graph needed for this type of search
+    """
     def __init__(self, cargo=None, parent=None):
         self.cargo = cargo
         self.prev = parent
@@ -45,7 +35,8 @@ class Node:
     def __str__(self):
         return str(self.cargo)
 
-def GenerateAllChildren(parent):
+# @profile
+def generateAllChildren(parent):
     """
     Generates all children of parent
     Based on inversions of size 3
@@ -55,31 +46,44 @@ def GenerateAllChildren(parent):
     temp_parentInv = copy.copy(parent)
     length = len(parent)
 
+    # for i in range(length - 3):
+    #     if i != 0:
+    #         temp_parent = copy.copy(parent)
+    #         temp_parentInv = copy.copy(parent)
+    #     if ((i < length - 3)):
+    #         temp = temp_parent[i]
+    #         temp_parent[i] = temp_parent[i + 3]
+    #         temp_parent[i + 3] = temp
+    #         strConvparent = copy.copy(temp_parent)
+    #         if (archive.search(str(strConvparent)) == False):
+    #             children.append(temp_parent)
+    #     elif ((i == (length - 1) | i == (length - 2) | i == (length -3))):
+    #         temp = temp_parentInv[i]
+    #         temp_parentInv[i] = temp_parentInv[i-3]
+    #         temp_parentInv[i-3] = temp
+    #         strConvparentInv = copy.copy(temp_parentInv)
+    #         if (archive.search(str(strConvparentInv)) == False):
+    #             children.append(temp_parentInv)
+
+
     for i in range(length - 2):
         if i != 0:
             temp_parent = copy.copy(parent)
             temp_parentInv = copy.copy(parent)
-#        if i == length - 1:
-#            return children
         if ((i < length - 2)):
             temp = temp_parent[i]
             temp_parent[i] = temp_parent[i + 2]
             temp_parent[i + 2] = temp
+            strConvparent = copy.copy(temp_parent)
+            if (archive.search(str(strConvparent)) == False):
+                children.append(temp_parent)
         elif ((i == (length - 1) | i == (length - 2))):
             temp = temp_parentInv[i]
             temp_parentInv[i] = temp_parentInv[i-2]
             temp_parentInv[i-2] = temp
-#        else:
-#            temp = temp_parent[i]
-
-#            temp_parent[i] = temp_parent[i + 1]
-#            temp_parent[i + 1] = temp
-        if temp_parent not in archive:
-            archive.append(temp_parent)
-            children.append(temp_parent)
-        elif temp_parentInv not in archive:
-            archive.append(temp_parentInv)
-            children.append(temp_parentInv)
+            strConvparentInv = copy.copy(temp_parentInv)
+            if (archive.search(str(strConvparentInv)) == False):
+                children.append(temp_parentInv)
 
     for i in range(len(parent) - 1):
         if i != 0:
@@ -90,69 +94,65 @@ def GenerateAllChildren(parent):
         temp = temp_parent[i]
         temp_parent[i] = temp_parent[i + 1]
         temp_parent[i + 1] = temp
+        strConvparent = copy.copy(temp_parent)
 
-        if temp_parent not in archive:
-            archive.append(temp_parent)
+        if (archive.search(str(strConvparent)) == False):
             children.append(temp_parent)
 
-#    print "Children: ", children
+    for j in range(len(children)):
+        archive.insert(str(children[j]))
+
     return children
 
+# @profile
+def selectChildren(children):
+
+    scores = []
+    # calculate "fitness" scores
+    for i in range(len(children)):
+        s = 1 - (seriesScore(children[i])/len(start))
+        print "SERIESSCORE=:   ", s
+        scores.append(s)
+        print "SCORES:     ", scores
+
+    # check which 3 genomes have the best scores
+    dictionary = heapq.nlargest(4, zip(scores, children))
+    print
+    print dictionary
+
+    # put the best genomes in a list before returning
+    best_children = []
+    for j in range(len(dictionary)):
+        best_children.append(dictionary[j][1])
+
+    children = []
+    scores = []
+    return best_children
 
 # algorithm
-def runSimulation(start, beam_width, solution, heuristic):
+# @profile
+def runSimulation(start, solution):
     """
     Returns minumum number of time steps needed to get to solution
     """
 
-    # initialise stack where genomes can be pushed in
-    # -------usage--------------
-    # stack = [3, 4, 5]
-    # stack.append(6) --> [3, 4, 5, 6]
-    # stack.pop() --> [3, 4, 5]
-
     solution_found = False
     pare_node = Node(start)
-    queue.append(pare_node)
-    memory = []
-    iterations = {}
-
-    pare_node = queue.pop(0)
-    c = GenerateAllChildren(pare_node.cargo)
-    for i in range(len(c)):
-        node = Node(c[i], pare_node)
-    # moved archive to genallchilds, queue appending should still function here
-    queue.append(node)
-
-    if (c[0] == solution):
-        print "Solution: ", c[0]
-        memory.append(c[0])
-        solution_found = True
-        inversions = 0
-        while(node.prev != None):
-            print node
-            node = node.prev
-            inversions += 1
-        print "Inversions: ", inversions
-        iterations[inversions] = memory
-        for key in iterations:
-            minimum = key
-            if key < minimum:
-                minimum = key
-                print minimum
-            print iterations
+    m = (0, pare_node)
+    heappush(queue, m)
 
     while (queue != [] and not solution_found):
-        pare_node = queue.pop(0)
-        c = GenerateAllChildren(pare_node.cargo)
-        for i in range(len(c)):
-            node = Node(c[i], pare_node)
-            # moved archive to genallchilds, queue appending should still function here
-            queue.append(node)
+        pare_node = heappop(queue)
+        children = generateAllChildren(pare_node[1].cargo)
 
+        c = selectChildren(children)
+        for i in range(len(c)):
+            score = seriesScore(c[i])
+            node = Node(c[i], pare_node[1])
+            l = (score, node)
+            heappush(queue, l)
             if (c[i] == solution):
                 print "Solution: ", c[i]
-                memory.append(c[i])
                 solution_found = True
                 inversions = 0
                 while(node.prev != None):
@@ -160,25 +160,36 @@ def runSimulation(start, beam_width, solution, heuristic):
                     node = node.prev
                     inversions += 1
                 print "Inversions: ", inversions
-                iterations[inversions] = memory
-                for key in iterations:
-                    minimum = key
-                    if key < minimum:
-                        minimum = key
-                        print minimum
-                    print iterations
 
-
-
-# starting point
+# starting points ##############################################################
 # start = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
 # solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
-start = [4,2,3,1]
-solution = [1,2,3,4]
-#start = [4,2,3,1,6,8,7,5]
-#solution = [1,2,3,4,5,6,7,8]
-#start = [4,2,3,1,6,11,10,9,8,7,5]
-#solution = [1,2,3,4,5,6,7,8,9,10,11]
 
-runSimulation(start, beam_width, solution,heuristic)
+start = [2,1,4,3]
+solution = [1,2,3,4]
+
+# start = [4,3,2,1,8,7,6,5]
+# solution = [1,2,3,4,5,6,7,8]
+
+## size: 8 ##
+# start = [4,2,3,1,6,8,7,5]
+# solution = [1,2,3,4,5,6,7,8]
+
+# ## size: 9 ##
+# start = [1,2,3,4,6,8,9,7,5]
+# solution = [1,2,3,4,5,6,7,8,9]
+
+## size: 10 ##
+# start = [4,2,3,1,10,6,8,9,7,5]
+# solution = [1,2,3,4,5,6,7,8,9,10]
+
+## size: 11 ##
+# start = [4,2,3,1,6,11,10,9,8,7,5]
+# solution = [1,2,3,4,5,6,7,8,9,10,11]
+
+# size : 15
+# start = [1,2,3,4,5,6,8,9,7,15,13,14,12,10,11]
+# solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+
+runSimulation(start, solution)
 print "---", (time.time() - start_time), "seconds ---"
