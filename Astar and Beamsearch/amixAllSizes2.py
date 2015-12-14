@@ -3,6 +3,7 @@
 #
 # A mix of beam and astar; uses a priority queue! and doesn't stop when solution found!
 # only prints best solution!
+# TODO: adjust beamwidth (called beam)
 #
 # time and memory checks: http://www.huyng.com/posts/python-performance-analysis/
 # paste:  @profile above the code you want to check
@@ -21,6 +22,10 @@ from heapq import *
 # initialise
 queue = []
 archive = Trie()
+
+#TODO adjust: ########################
+beam = 4
+######################################
 
 start_time = time.time()
 
@@ -77,7 +82,7 @@ def selectChildren(children):
         scores.append(s)
 
     # check which 3 genomes have the best scores
-    dictionary = heapq.nsmallest(2, zip(scores, children))
+    dictionary = heapq.nsmallest(beam, zip(scores, children))
 
     # put the best genomes in a list before returning
     best_children = []
@@ -136,15 +141,15 @@ def runSimulation(start, solution):
 # start = [2,1,4,3]
 # solution = [1,2,3,4]
 
-start = [1,2,3,5,6,4]
-solution = [1,2,3,4,5,6]
+# start = [1,2,3,5,6,4]
+# solution = [1,2,3,4,5,6]
 
 # start = [1,2,7,3,5,6,4]
 # solution = [1,2,3,4,5,6,7]
 
 ## size: 8 ##
-# start = [4,2,3,1,6,8,7,5]
-# solution = [1,2,3,4,5,6,7,8]
+start = [4,2,3,1,6,8,7,5]
+solution = [1,2,3,4,5,6,7,8]
 
 ## size: 9 ##
 # start = [1,2,3,4,6,8,9,7,5]
