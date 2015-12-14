@@ -27,15 +27,15 @@ while melan != miran:
 
     # loops for length of genome
     for i in range(0, leng + 1, 1):
-        
+
         # checks if value in string equals place of runth place in genome
         if ((melan[i] == runs + 1) & even == False):
-            
+
             j = runs
-            
+
             # checks if current gene not in right place of genome
             if (melan[i] != (i + 1)):
-            
+
                 # swapping algorithm
                 while i > j:
                     temp = melan[j]
@@ -43,7 +43,7 @@ while melan != miran:
                     melan[i] = temp
                     i -= 1
                     j += 1
-                
+
                 # update amount of inversions and times run through string
                 inversions += 1
                 runs += 1
@@ -56,7 +56,7 @@ while melan != miran:
                 runs += 1
         if (melan[i] == len(melan) - counter & (even == True)):
             if (melan[i] != (i + 1)):
-            
+
                 # swapping algorithm
                 while i > j:
                     temp = melan[j]
@@ -64,7 +64,7 @@ while melan != miran:
                     melan[i] = temp
                     i -= 1
                     j += 1
-                
+
                 # update amount of inversions and times run through string
                 inversions += 1
                 runs += 1
@@ -78,9 +78,9 @@ while melan != miran:
             print runs
             print melan
         print i, j
-    
+
     # ensures loop starts after alreay ordened genes
     i = j
-        
+
 print "Inversions: " + str(inversions)
-print "Soled Melanogaster: " + str(melan)
+print "Solved Melanogaster: " + str(melan)
