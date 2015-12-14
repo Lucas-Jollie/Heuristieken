@@ -47,6 +47,8 @@ def generateAllChildren(parent):
     temp_parentInv = copy.copy(parent)
     length = len(parent)
 
+
+
     for i in range(length - 2):
         if i != 0:
             temp_parent = copy.copy(parent)
@@ -146,8 +148,8 @@ def runSimulation(start, solution):
 # solution = [1,2,3,4]
 
 ## size: 8 ##
-# start = [4,2,3,1,6,8,7,5]
-# solution = [1,2,3,4,5,6,7,8]
+start = [4,2,3,1,6,8,7,5]
+solution = [1,2,3,4,5,6,7,8]
 
 ## size: 9 ##
 # start = [1,2,3,4,6,8,9,7,5]
@@ -158,8 +160,8 @@ def runSimulation(start, solution):
 # solution = [1,2,3,4,5,6,7,8,9,10]
 
 ## size: 11 ##
-start = [4,2,3,1,6,11,10,9,8,7,5]
-solution = [1,2,3,4,5,6,7,8,9,10,11]
+# start = [4,2,3,1,6,11,10,9,8,7,5]
+# solution = [1,2,3,4,5,6,7,8,9,10,11]
 
 runSimulation(start, solution)
 print "---", (time.time() - start_time), "seconds ---"
