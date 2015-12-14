@@ -45,7 +45,7 @@ melan = [1, 2, 3, 4, 5]
 def bart(genome):
 
     series = 0
-    print "series", series
+#    print "series", series
     added = False
     serieLen = 0.0
     lengthN = len(genome)
@@ -77,14 +77,14 @@ def bart(genome):
     if serieLen == 0:
         serieLen = 0.00001
     unsorted = lengthN - serieLen
-    print "counter", counter
+#    print "counter", counter
     series = counter
-    print "serie length", serieLen
+#    print "serie length", serieLen
 
     D = 1 + ((series + unsorted) / serieLen) * lengthN
     return D
     
 
 ans = bart(melan)
-print "bart", ans
+#print "bart", ans
 
