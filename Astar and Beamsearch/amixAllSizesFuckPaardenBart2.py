@@ -75,7 +75,7 @@ def selectChildren(children):
         scores.append(s)
 
     # check which 3 genomes have the best scores
-    dictionary = heapq.nsmallest(4, zip(scores, children))
+    dictionary = heapq.nsmallest(2, zip(scores, children))
 
     # put the best genomes in a list before returning
     best_children = []
@@ -122,8 +122,13 @@ def runSimulation(start, solution):
 # start = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
 # solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
 
+<<<<<<< HEAD
+#start = [2,1,4,3]
+#solution = [1,2,3,4]
+=======
 # start = [2,1,4,3]
 # solution = [1,2,3,4]
+>>>>>>> c371b71dcafffc98495d56a49f3d10bcb2a31065
 
 # start = [1,2,3,5,6,4]
 # solution = [1,2,3,4,5,6]
@@ -133,8 +138,8 @@ def runSimulation(start, solution):
 # solution = [1,2,3,4,5,6,7,8]
 
 ## size: 9 ##
-# start = [1,2,3,4,6,8,9,7,5]
-# solution = [1,2,3,4,5,6,7,8,9]
+start = [1,2,3,4,6,8,9,7,5]
+solution = [1,2,3,4,5,6,7,8,9]
 
 ## size: 10 ##
 # start = [4,2,3,1,10,6,8,9,7,5]

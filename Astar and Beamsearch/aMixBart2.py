@@ -25,7 +25,6 @@ archive = Trie()
 
 #TODO adjust: ########################
 beam = 3
-maxqueue = 50
 ######################################
 
 start_time = time.time()
@@ -106,7 +105,7 @@ def runSimulation(start, solution):
     m = (0, pare_node)
     heappush(queue, m)
 
-    while (queue != [] and (len(solutionNodes) < 3)):
+    while (queue != []):
         pare_node = heappop(queue)
         children = generateAllChildren(pare_node[1].cargo)
 
@@ -120,29 +119,28 @@ def runSimulation(start, solution):
             else:
                 score = bart(c[i])
                 l = (score, node)
-                if (len(queue) <= maxqueue):
+                if (len(queue) <= 50):
                     heappush(queue, l)
                 else:
                     heappushpop(queue, l)
 
-
+    inversions = 0
     for j in range(len(solutionNodes)):
-        inversions = 0
         node = solutionNodes[j]
-        while((node.prev != None)):
+        while((node.prev != None) and (inversions < lowest)):
             print "Step", node
             node = node.prev
             inversions += 1
-        # if ((inversions < lowest) and (node.prev == None)):
-        #     lowest = inversions
-        print "Inversions: ", inversions
+        if ((inversions < lowest) and (node.prev == None)):
+            lowest = inversions
+            print "Inversions: ", inversions
         j += 1
-    #
-    # print "Start: ", start
+
+    print "Start: ", start
 
 # starting points ##############################################################
-start = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
-solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
+# start = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
+# solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
 
 # start = [2,1,4,3]
 # solution = [1,2,3,4]
@@ -162,8 +160,8 @@ solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
 # solution = [1,2,3,4,5,6,7,8,9]
 
 ## size: 10 ##
-# start = [4,2,3,1,10,6,8,9,7,5]
-# solution = [1,2,3,4,5,6,7,8,9,10]
+start = [4,2,3,1,10,6,8,9,7,5]
+solution = [1,2,3,4,5,6,7,8,9,10]
 
 ## size: 11 ##
 <<<<<<< HEAD
