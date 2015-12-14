@@ -24,7 +24,8 @@ queue = []
 archive = Trie()
 
 #TODO adjust: ########################
-beam = 2
+beam = 5
+maxqueue = 10
 ######################################
 
 start_time = time.time()
@@ -115,7 +116,7 @@ def runSimulation(start, solution):
             score = bart(c[i])
             node = Node(c[i], pare_node[1])
             l = (score, node)
-            if (len(queue) <= 50):
+            if (len(queue) <= maxqueue):
                 heappush(queue, l)
             else:
                 heappushpop(queue, l)
