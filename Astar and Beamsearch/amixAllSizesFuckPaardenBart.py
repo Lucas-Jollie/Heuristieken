@@ -122,8 +122,8 @@ def runSimulation(start, solution):
 # start = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
 # solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
 
-start = [2,1,4,3]
-solution = [1,2,3,4]
+# start = [2,1,4,3]
+# solution = [1,2,3,4]
 
 # start = [1,2,3,5,6,4]
 # solution = [1,2,3,4,5,6]
@@ -141,8 +141,8 @@ solution = [1,2,3,4]
 # solution = [1,2,3,4,5,6,7,8,9,10]
 
 ## size: 11 ##
-# start = [4,2,3,1,6,11,10,9,8,7,5]
-# solution = [1,2,3,4,5,6,7,8,9,10,11]
+start = [4,2,3,1,6,11,10,9,8,7,5]
+solution = [1,2,3,4,5,6,7,8,9,10,11]
 
 runSimulation(start, solution)
 print "---", (time.time() - start_time), "seconds ---"

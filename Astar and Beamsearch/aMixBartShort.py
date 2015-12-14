@@ -24,7 +24,7 @@ queue = []
 archive = Trie()
 
 #TODO adjust: ########################
-beam = 3
+beam = 2
 ######################################
 
 start_time = time.time()
@@ -104,43 +104,35 @@ def runSimulation(start, solution):
     pare_node = Node(start)
     m = (0, pare_node)
     heappush(queue, m)
+    solution_found = False
 
-    while (queue != []):
+    while (queue != [] and (solution_found == False)):
         pare_node = heappop(queue)
         children = generateAllChildren(pare_node[1].cargo)
 
         c = selectChildren(children)
         for i in range(len(c)):
-            # create nodes
+            score = bart(c[i])
             node = Node(c[i], pare_node[1])
-            if (c[i] == solution):
-                solutionNodes.append(node)
-                print "length of solutionNodes: ", len(solutionNodes)
+            l = (score, node)
+            if (len(queue) <= 50):
+                heappush(queue, l)
             else:
-                score = bart(c[i])
-                l = (score, node)
-                if (len(queue) <= 50):
-                    heappush(queue, l)
-                else:
-                    heappushpop(queue, l)
+                heappushpop(queue, l)
+            if (c[i] == solution):
+                print "Solution: ", c[i]
+                solution_found = True
+                inversions = 0
+                while(node.prev != None):
+                    print node
+                    node = node.prev
+                    inversions += 1
+                print "Inversions: ", inversions
 
-    inversions = 0
-    for j in range(len(solutionNodes)):
-        node = solutionNodes[j]
-        while((node.prev != None) and (inversions < lowest)):
-            print "Step", node
-            node = node.prev
-            inversions += 1
-        if ((inversions < lowest) and (node.prev == None)):
-            lowest = inversions
-            print "Inversions: ", inversions
-        j += 1
-
-    print "Start: ", start
 
 # starting points ##############################################################
-# start = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
-# solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
+start = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
+solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
 
 # start = [2,1,4,3]
 # solution = [1,2,3,4]
@@ -160,8 +152,8 @@ def runSimulation(start, solution):
 # solution = [1,2,3,4,5,6,7,8,9]
 
 ## size: 10 ##
-start = [4,2,3,1,10,6,8,9,7,5]
-solution = [1,2,3,4,5,6,7,8,9,10]
+# start = [4,2,3,1,10,6,8,9,7,5]
+# solution = [1,2,3,4,5,6,7,8,9,10]
 
 ## size: 11 ##
 # start = [4,2,3,1,6,11,10,9,8,7,5]

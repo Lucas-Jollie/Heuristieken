@@ -4,7 +4,7 @@ def seriesScore(genome):
     divided by the number of series
     e.g. [1,2,3,5,4] returns 5 divided by 2
     """
-    
+
     """
     Lucas self notes:
     D = 1 + (T + U) / St
@@ -19,20 +19,20 @@ def seriesScore(genome):
     newseriesdown = False
     series = 0.0
     serieLen = 0.0
-    
 
-    
+
+
 
 #    unsorted = lengthN - serieLen
 #    print serieLen
 #    print series
 #    print "totalLen", totalLen
-    
+
     return series
-    
+
 #    D = 1 + ((series + unsorted) / serieLen) * lengthN
 #    return D
-    
+
 melan = [1, 2, 3, 4, 5]
 #melan = [2, 1, 3, 4, 5]
 #melan = [5, 4,3,2,1]
@@ -69,13 +69,13 @@ def bart(genome):
             archive.append(genome[i])
         if ((genome[i] + 1 != genome[i+1]) & (genome[i] - 1 != genome[i+1])):
             counter += 1
-            
+
     serieLen = len(archive)
     if added == True:
         serieLen += 1
-        
+
     if serieLen == 0:
-        serieLen = 0.00001
+        serieLen = 0.001
     unsorted = lengthN - serieLen
 #    print "counter", counter
     series = counter
@@ -83,8 +83,7 @@ def bart(genome):
 
     D = 1 + ((series + unsorted) / serieLen) * lengthN
     return D
-    
+
 
 ans = bart(melan)
 #print "bart", ans
-
