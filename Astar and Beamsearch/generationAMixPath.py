@@ -19,12 +19,9 @@ queue = []
 archive = Trie()
 
 #TODO adjust: ########################
-beam = 10
-beam1 = 10
-generationsBeam = 5
-beam2 = 5
+beam = 600
 maxQueue = 50
-maxGenerations = 20
+maxGenerations = 30
 ######################################
 
 start_time = time.time()
@@ -62,24 +59,25 @@ def generateAllChildren(parent):
                     begin += 1
                     end -= 1
                 string_parent = copy.copy(temp_parent)
-
-                if (archive.search(str(string_parent)) == False):
-                    children.append(temp_parent)
-                    if ((str(string_parent) != str(stringsol))):
-                        archive.insert(str(string_parent))
+                children.append(temp_parent)
 
     return children
 
 def selectChildren(childrennodes, g):
 
     scores = []
+    children = []
+    genomes = []
     # calculate "fitness" scores
     for i in range(len(childrennodes)):
-        s = generationScore(childrennodes[i].cargo, g)
-        scores.append(s)
+        if (childrennodes[i].cargo not in genomes):
+            s = generationScore(childrennodes[i].cargo, g)
+            scores.append(s)
+            children.append(childrennodes[i])
+            genomes.append(childrennodes[i].cargo)
 
     # check which 3 genomes have the best scores
-    dictionary = heapq.nsmallest(beam, zip(scores, childrennodes))
+    dictionary = heapq.nsmallest(beam, zip(scores, children))
 
     # put the best genomes in a list before returning
     best_children = []
@@ -107,23 +105,14 @@ def runSimulation(start, solution):
         nextGeneration = []
         print "--- Computing generation", g, "---"
         g += 1
-        if (g < generationsBeam):
-            for b in range(beam1):
-                if (queue != []):
-                    pare_node = heappop(queue)
-                    children = generateAllChildren(pare_node[1].cargo)
-                    for i in range(len(children)):
-                        # create nodes
-                        node = Node(children[i], pare_node[1])
-                        nextGeneration.append(node)
-        else:
-            for b in range(beam2):
-                if (queue != []):
-                    pare_node = heappop(queue)
-                    children = generateAllChildren(pare_node[1].cargo)
-                    for i in range(len(children)):
-                        node = Node(children[i], pare_node[1])
-                        nextGeneration.append(node)
+        for b in range(beam):
+            if (queue != []):
+                pare_node = heappop(queue)
+                children = generateAllChildren(pare_node[1].cargo)
+                for i in range(len(children)):
+                    # create nodes
+                    node = Node(children[i], pare_node[1])
+                    nextGeneration.append(node)
 
         c = selectChildren(nextGeneration, g)
         for i in range(len(c)):
@@ -131,6 +120,7 @@ def runSimulation(start, solution):
                 solution_found = True
                 solutionNodes.append(c[i])
                 print "Solutions found:", len(solutionNodes)
+                break
             else:
                 score = generationScore(c[i].cargo, g)
                 l = (score, c[i])
@@ -138,6 +128,7 @@ def runSimulation(start, solution):
                     heappush(queue, l)
                 else:
                     heappushpop(queue, l)
+        queue = []
 
     # only print shortest solutions
     lowest = 50
@@ -155,29 +146,29 @@ def runSimulation(start, solution):
         j += 1
 
 # starting points ##############################################################
-start = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
-solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
+# start = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
+# solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
 
 # start = [2,1,4,3]
 # solution = [1,2,3,4]
 
-#start = [1,2,3,5,6,4]
-#solution = [1,2,3,4,5,6]
+# start = [1,2,3,5,6,4]
+# solution = [1,2,3,4,5,6]
 
 # start = [1,2,7,3,5,6,4]
 # solution = [1,2,3,4,5,6,7]
 
 ## size: 8 ##
-#start = [4,2,3,1,6,8,7,5]
-#solution = [1,2,3,4,5,6,7,8]
+# start = [4,2,3,1,6,8,7,5]
+# solution = [1,2,3,4,5,6,7,8]
 
 ## size: 9 ##
 # start = [1,2,3,4,6,8,9,7,5]
 # solution = [1,2,3,4,5,6,7,8,9]
 
 ## size: 10 ##
-# start = [4,2,3,1,10,6,8,9,7,5]
-# solution = [1,2,3,4,5,6,7,8,9,10]
+start = [4,2,3,1,10,6,8,9,7,5]
+solution = [1,2,3,4,5,6,7,8,9,10]
 
 ## size: 11 ##
 # start = [4,2,3,1,6,11,10,9,8,7,5]
