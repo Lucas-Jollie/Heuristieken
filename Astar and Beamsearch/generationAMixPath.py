@@ -84,7 +84,7 @@ def selectChildren(childrennodes, g):
     # put the best genomes in a list before returning
     best_children = []
     for j in range(len(dictionary)):
-        best_children.append(dictionary[j][1].cargo)
+        best_children.append(dictionary[j][1])
 
     childrennodes = []
     scores = []
