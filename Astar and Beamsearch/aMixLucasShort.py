@@ -88,7 +88,7 @@ def selectChildren(children):
         scores.append(s)
 
     # check which 3 genomes have the best scores
-    dictionary = heapq.nlargest(beam, zip(scores, children))
+    dictionary = heapq.nsmallest(beam, zip(scores, children))
 
     # put the best genomes in a list before returning
     best_children = []
@@ -117,10 +117,10 @@ def runSimulation(start, solution):
         genCount = genCount + 1
         pare_node = heappop(queue)
         children = generateAllChildren(pare_node[1].cargo)
+        print genCount
 
         c = selectChildren(children)
         for i in range(len(c)):
-            print genCount
             score = generationScore(c[i], genCount)
             node = Node(c[i], pare_node[1])
             l = (score, node)
