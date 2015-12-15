@@ -22,9 +22,9 @@ archive = Trie()
 beam = 10
 beam1 = 10
 generationsBeam = 5
-beam2 = 8
+beam2 = 5
 maxQueue = 50
-maxGenerations = 10
+maxGenerations = 20
 ######################################
 
 start_time = time.time()
@@ -103,7 +103,7 @@ def runSimulation(start, solution):
     m = (0, pare_node)
     heappush(queue, m)
 
-    while ((queue != []) and (g <= maxGenerations)):
+    while ((queue != []) and (g <= maxGenerations) and (solution_found == False)):
         nextGeneration = []
         print "--- Computing generation", g, "---"
         g += 1
@@ -127,12 +127,13 @@ def runSimulation(start, solution):
 
         c = selectChildren(nextGeneration, g)
         for i in range(len(c)):
-            if (c[i] == solution):
-                solutionNodes.append(node)
+            if (c[i].cargo == solution):
+                solution_found = True
+                solutionNodes.append(c[i])
                 print "Solutions found:", len(solutionNodes)
             else:
-                score = generationScore(c[i], g)
-                l = (score, node)
+                score = generationScore(c[i].cargo, g)
+                l = (score, c[i])
                 if (len(queue) <= maxQueue):
                     heappush(queue, l)
                 else:
@@ -154,21 +155,21 @@ def runSimulation(start, solution):
         j += 1
 
 # starting points ##############################################################
-# start = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
-# solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
+start = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
+solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
 
 # start = [2,1,4,3]
 # solution = [1,2,3,4]
 
-# start = [1,2,3,5,6,4]
-# solution = [1,2,3,4,5,6]
+#start = [1,2,3,5,6,4]
+#solution = [1,2,3,4,5,6]
 
 # start = [1,2,7,3,5,6,4]
 # solution = [1,2,3,4,5,6,7]
 
 ## size: 8 ##
-start = [4,2,3,1,6,8,7,5]
-solution = [1,2,3,4,5,6,7,8]
+#start = [4,2,3,1,6,8,7,5]
+#solution = [1,2,3,4,5,6,7,8]
 
 ## size: 9 ##
 # start = [1,2,3,4,6,8,9,7,5]
