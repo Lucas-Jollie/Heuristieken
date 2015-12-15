@@ -10,19 +10,17 @@
 import time
 import copy
 import heapq
-from pythontrie import Trie
 from scoreDefs import generationScore
 from heapq import *
 
 # initialise
 queue = []
-archive = Trie()
 
 #TODO adjust: ########################
-beam = 30
-beam1 = 50
+beam = 50
+beam1 = 500
 generationsBeam = 10
-beam2 = 30
+beam2 = 350
 maxQueue = 50
 maxGenerations = 16
 ######################################
@@ -62,11 +60,7 @@ def generateAllChildren(parent):
                     begin += 1
                     end -= 1
                 string_parent = copy.copy(temp_parent)
-
-                if (archive.search(str(string_parent)) == False):
-                    children.append(temp_parent)
-                    if ((str(string_parent) != str(stringsol))):
-                        archive.insert(str(string_parent))
+                children.append(temp_parent)
 
     # print children
     return children
