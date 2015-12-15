@@ -11,7 +11,7 @@ import time
 import copy
 import heapq
 from pythontrie import Trie
-from fuckPaardenbloemen import bart
+from scoreDefs import generationScore
 from heapq import *
 
 # initialise
@@ -19,9 +19,12 @@ queue = []
 archive = Trie()
 
 #TODO adjust: ########################
-beam = 10
+beam = 30
+beam1 = 50
+generationsBeam = 10
+beam2 = 30
 maxQueue = 50
-maxGenerations = 21
+maxGenerations = 16
 ######################################
 
 start_time = time.time()
@@ -68,12 +71,12 @@ def generateAllChildren(parent):
     # print children
     return children
 
-def selectChildren(children):
+def selectChildren(children, g):
 
     scores = []
     # calculate "fitness" scores
     for i in range(len(children)):
-        s = bart(children[i])
+        s = generationScore(children[i], g)
         scores.append(s)
 
     # check which 3 genomes have the best scores
@@ -96,49 +99,50 @@ def runSimulation(start, solution):
     nextGeneration = []
     solutionNodes = []
     g = 0
+    solution_found = False
+
     pare_node = Node(start)
     m = (0, pare_node)
     heappush(queue, m)
 
-    while ((queue != []) and (g <= maxGenerations)):
-        print "computing generation ", g
+    while ((queue != []) and (g <= maxGenerations) and (solution_found == False)):
+        print "--- Computing generation", g, "---"
         print "Queue length ", len(queue)
         g += 1
-        for b in range(beam):
-            if (queue != []):
-                pare_node = heappop(queue)
-                children = generateAllChildren(pare_node[1].cargo)
-                for i in range(len(children)):
-                    nextGeneration.append(children[i])
+        if (g < generationsBeam):
+            for b in range(beam1):
+                if (queue != []):
+                    pare_node = heappop(queue)
+                    children = generateAllChildren(pare_node[1].cargo)
+                    for i in range(len(children)):
+                        nextGeneration.append(children[i])
+        else:
+            for b in range(beam2):
+                if (queue != []):
+                    pare_node = heappop(queue)
+                    children = generateAllChildren(pare_node[1].cargo)
+                    for i in range(len(children)):
+                        nextGeneration.append(children[i])
 
-        c = selectChildren(nextGeneration)
+        c = selectChildren(nextGeneration, g)
         for i in range(len(c)):
             # create nodes
             node = Node(c[i], pare_node[1])
             if (c[i] == solution):
                 solutionNodes.append(node)
-                print "length of solutionNodes: ", len(solutionNodes)
+                solution_found = True
+                inversions = 0
+                while((node.prev != None) and (inversions < lowest)):
+                    node = node.prev
+                    inversions += 1
+                print "No. of inversions:", inversions
             else:
-                score = bart(c[i])
+                score = generationScore(c[i], g)
                 l = (score, node)
                 if (len(queue) <= maxQueue):
                     heappush(queue, l)
                 else:
                     heappushpop(queue, l)
-
-    # only print shortest solutions
-    lowest = 50
-    inversions = 0
-    for j in range(len(solutionNodes)):
-        node = solutionNodes[j]
-        while((node.prev != None) and (inversions < lowest)):
-            # print "Step", node
-            node = node.prev
-            inversions += 1
-        if (inversions < lowest):
-            lowest = inversions
-            print "Inversions: ", inversions
-        j += 1
 
 # starting points ##############################################################
 start = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
