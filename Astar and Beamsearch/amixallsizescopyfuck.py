@@ -66,7 +66,7 @@ def generateAllChildren(parent):
     return children
 
 # @profile
-def selectChildren(children):
+def selectChildren(children, beam):
 
     scores = []
     # calculate "fitness" scores
@@ -75,7 +75,7 @@ def selectChildren(children):
         scores.append(s)
 
     # check which 3 genomes have the best scores
-    dictionary = heapq.nlargest(3, zip(scores, children))
+    dictionary = heapq.nsmallest(beam, zip(scores, children))
 
     # put the best genomes in a list before returning
     best_children = []
@@ -93,19 +93,32 @@ def runSimulation(start, solution):
     Returns minumum number of time steps needed to get to solution
     """
 
+    scoredict = {}
+    pathway = []
+    childrenlist = []
+
     solution_found = False
     pare_node = Node(start)
     m = (0, pare_node)
     heappush(queue, m)
 
+    tempnode = heappop(queue)
+    tempchildren = generateAllChildren(tempnode[1].cargo)
+    for k in range(len(tempchildren)):
+        score = seriesScore(tempchildren[k])
+        initnode = Node(tempchildren[k], tempnode[1])
+        v = (score, initnode)
+        heappush(queue, v)
+        print queue[k][1]
+
+    print
     while (queue != [] and not solution_found):
         pare_node = heappop(queue)
+        # print pare_node[1]
         children = generateAllChildren(pare_node[1].cargo)
-
-        c = selectChildren(children)
+        c = selectChildren(children,10)
         for i in range(len(c)):
             score = seriesScore(c[i])
-            print score
             node = Node(c[i], pare_node[1])
             l = (score, node)
             heappush(queue, l)
@@ -115,9 +128,17 @@ def runSimulation(start, solution):
                 inversions = 0
                 while(node.prev != None):
                     print node
+                    pathway.append(node.cargo)
                     node = node.prev
                     inversions += 1
                 print "Inversions: ", inversions
+                scoredict[inversions] = pathway
+                for key, val in scoredict.items():
+                    currentmin = key
+                    print currentmin
+
+            # elif (i == len(c) - 1 and c[len(c) - 1] != solution and solution_found == False):
+            #     c=selectChildren(children,3)
 
 # starting points ##############################################################
 # start = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
@@ -126,12 +147,12 @@ def runSimulation(start, solution):
 # start = [2,1,4,3]
 # solution = [1,2,3,4]
 
-start = [1,2,3,5,6,4]
-solution = [1,2,3,4,5,6]
+# start = [1,2,3,5,6,4]
+# solution = [1,2,3,4,5,6]
 
 ## size: 8 ##
-# start = [4,2,3,1,6,8,7,5]
-# solution = [1,2,3,4,5,6,7,8]
+start = [4,2,3,1,6,8,7,5]
+solution = [1,2,3,4,5,6,7,8]
 
 ## size: 9 ##
 # start = [1,2,3,4,6,8,9,7,5]
