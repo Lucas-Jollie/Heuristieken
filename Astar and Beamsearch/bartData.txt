@@ -1,0 +1,6 @@
+melan = [5,4,1,3,2], bart = 6
+melan = [4,2,5,1,3], bart = 4999996.0
+melan = [3,2,1,4,5], bart = 1.0
+melan = [5,4,3,2,1], bart = 1.0
+melan = [2,1,3,4,5], bart = 1.0
+melan = [1,2,3,4,5], bart = 1.0
