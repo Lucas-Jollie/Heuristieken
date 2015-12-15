@@ -3,26 +3,25 @@
 #
 # A mix of beam and astar; uses a priority queue! and doesn't stop when solution found!
 # only prints best solution!
-#
-# time and memory checks: http://www.huyng.com/posts/python-performance-analysis/
-# paste:  @profile above the code you want to check
-# for time check: $ kernprof -l -v 'amix.py' > timeramix.txt
-#
+# loops through the generations instead of just the priority queue
 # -------------------------------------------------------------------------------
 
 # imports
 import time
 import copy
 import heapq
+from pythontrie import Trie
 from fuckPaardenbloemen import bart
 from heapq import *
 
 # initialise
 queue = []
+archive = Trie()
 
 #TODO adjust: ########################
-beam = 2
-maxqueue = 50
+beam = 10
+maxQueue = 50
+maxGenerations = 21
 ######################################
 
 start_time = time.time()
@@ -39,7 +38,6 @@ class Node:
     def __str__(self):
         return str(self.cargo)
 
-# @profile
 def generateAllChildren(parent):
     """
     Generates all children of parent
@@ -62,12 +60,14 @@ def generateAllChildren(parent):
                     end -= 1
                 string_parent = copy.copy(temp_parent)
 
-                children.append(temp_parent)
+                if (archive.search(str(string_parent)) == False):
+                    children.append(temp_parent)
+                    if ((str(string_parent) != str(stringsol))):
+                        archive.insert(str(string_parent))
 
     # print children
     return children
 
-# @profile
 def selectChildren(children):
 
     scores = []
@@ -89,41 +89,50 @@ def selectChildren(children):
     return best_children
 
 # algorithm
-# @profile
 def runSimulation(start, solution):
     """
     Returns minumum number of time steps needed to get to solution
     """
+    nextGeneration = []
     solutionNodes = []
+    g = 0
     pare_node = Node(start)
-
-    # TODO: make tuple for rootnode (score, generation, genome)?
     m = (0, pare_node)
     heappush(queue, m)
 
-    while (queue != [] and (len(solutionNodes) <= 10000)):
-        pare_node = heappop(queue)
-        children = generateAllChildren(pare_node[1].cargo)
+    while ((queue != []) and (g <= maxGenerations)):
+        print "computing generation ", g
+        print "Queue length ", len(queue)
+        g += 1
+        for b in range(beam):
+            if (queue != []):
+                pare_node = heappop(queue)
+                children = generateAllChildren(pare_node[1].cargo)
+                for i in range(len(children)):
+                    nextGeneration.append(children[i])
 
-        c = selectChildren(children)
+        c = selectChildren(nextGeneration)
         for i in range(len(c)):
             # create nodes
             node = Node(c[i], pare_node[1])
             if (c[i] == solution):
                 solutionNodes.append(node)
+                print "length of solutionNodes: ", len(solutionNodes)
             else:
                 score = bart(c[i])
                 l = (score, node)
-                if ((len(queue) <= maxqueue) and (l not in queue)):
+                if (len(queue) <= maxQueue):
                     heappush(queue, l)
                 else:
                     heappushpop(queue, l)
+
+    # only print shortest solutions
     lowest = 50
     inversions = 0
     for j in range(len(solutionNodes)):
         node = solutionNodes[j]
         while((node.prev != None) and (inversions < lowest)):
-            print "Step", node
+            # print "Step", node
             node = node.prev
             inversions += 1
         if (inversions < lowest):
@@ -131,15 +140,13 @@ def runSimulation(start, solution):
             print "Inversions: ", inversions
         j += 1
 
-
-
 # starting points ##############################################################
 start = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
 solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
 
 # start = [2,1,4,3]
 # solution = [1,2,3,4]
-#
+
 # start = [1,2,3,5,6,4]
 # solution = [1,2,3,4,5,6]
 
