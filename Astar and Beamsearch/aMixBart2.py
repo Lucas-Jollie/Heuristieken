@@ -3,7 +3,6 @@
 #
 # A mix of beam and astar; uses a priority queue! and doesn't stop when solution found!
 # only prints best solution!
-# TODO: adjust beamwidth (called beam)
 #
 # time and memory checks: http://www.huyng.com/posts/python-performance-analysis/
 # paste:  @profile above the code you want to check
