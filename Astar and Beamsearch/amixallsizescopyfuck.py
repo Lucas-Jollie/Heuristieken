@@ -20,7 +20,7 @@ from heapq import *
 
 # initialise
 queue = []
-archive = Trie()
+# archive = Trie()
 
 start_time = time.time()
 
@@ -57,10 +57,11 @@ def generateAllChildren(parent):
                     temp_parent[begin] = temp
                     begin += 1
                     end -= 1
-                string_parent = copy.copy(temp_parent)
-                if (archive.search(str(string_parent)) == False):
-                    children.append(temp_parent)
-                    archive.insert(str(temp_parent))
+                children.append(temp_parent)
+                # string_parent = copy.copy(temp_parent)
+                # if (archive.search(str(string_parent)) == False):
+                #     children.append(temp_parent)
+                #     archive.insert(str(temp_parent))
 
     # print children
     return children
@@ -96,6 +97,7 @@ def runSimulation(start, solution):
     scoredict = {}
     pathway = []
     childrenlist = []
+    currentmin = 20
 
     solution_found = False
     pare_node = Node(start)
@@ -105,11 +107,11 @@ def runSimulation(start, solution):
     tempnode = heappop(queue)
     tempchildren = generateAllChildren(tempnode[1].cargo)
     for k in range(len(tempchildren)):
-        score = seriesScore(tempchildren[k])
+        tempscore = seriesScore(tempchildren[k])
         initnode = Node(tempchildren[k], tempnode[1])
-        v = (score, initnode)
+        v = (tempscore, initnode)
         heappush(queue, v)
-        print queue[k][1]
+        # print queue[k][1]
 
     print
     while (queue != [] and not solution_found):
@@ -132,7 +134,10 @@ def runSimulation(start, solution):
                     node = node.prev
                     inversions += 1
                 print "Inversions: ", inversions
-                scoredict[inversions] = pathway
+                if (inversions < currentmin):
+                    scoredict = {}
+                    scoredict[inversions] = pathway
+                print scoredict
                 for key, val in scoredict.items():
                     currentmin = key
                     print currentmin
@@ -151,8 +156,8 @@ def runSimulation(start, solution):
 # solution = [1,2,3,4,5,6]
 
 ## size: 8 ##
-start = [4,2,3,1,6,8,7,5]
-solution = [1,2,3,4,5,6,7,8]
+# start = [4,2,3,1,6,8,7,5]
+# solution = [1,2,3,4,5,6,7,8]
 
 ## size: 9 ##
 # start = [1,2,3,4,6,8,9,7,5]
@@ -163,8 +168,8 @@ solution = [1,2,3,4,5,6,7,8]
 # solution = [1,2,3,4,5,6,7,8,9,10]
 
 ## size: 11 ##
-# start = [4,2,3,1,6,11,10,9,8,7,5]
-# solution = [1,2,3,4,5,6,7,8,9,10,11]
+start = [1,2,3,4,5,6,11,10,9,8,7]
+solution = [1,2,3,4,5,6,7,8,9,10,11]
 
 runSimulation(start, solution)
 print "---", (time.time() - start_time), "seconds ---"

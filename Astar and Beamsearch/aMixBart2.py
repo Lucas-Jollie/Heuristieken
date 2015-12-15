@@ -117,6 +117,7 @@ def runSimulation(start, solution):
             if (c[i] == solution):
                 solutionNodes.append(node)
                 print "length of solutionNodes: ", len(solutionNodes)
+                print c[]
             else:
                 score = bart(c[i])
                 l = (score, node)
