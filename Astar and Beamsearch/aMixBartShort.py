@@ -24,8 +24,8 @@ queue = []
 archive = Trie()
 
 #TODO adjust: ########################
-beam = 5
-maxqueue = 10
+beam = 1
+maxqueue = 50000
 ######################################
 
 start_time = time.time()

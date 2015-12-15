@@ -1,11 +1,5 @@
 def seriesScore(genome):
     """
-    returns the number of genes that are in a series
-    divided by the number of series
-    e.g. [1,2,3,5,4] returns 5 divided by 2
-    """
-
-    """
     Lucas self notes:
     D = 1 + (T + U) / St
     met D is priority
@@ -40,9 +34,14 @@ melan = [1, 2, 3, 4, 5]
 #melan = [5,4,1,3,2]
 #melan = [4, 2, 5, 1, 3]
 #print seriesScore(melan)
-
+#solution = [1,2,3,4,5]
 
 def bart(genome):
+
+    if len(genome) == 25:
+        solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
+    else:
+        solution = []
 
     series = 0
 #    print "series", series
@@ -81,7 +80,11 @@ def bart(genome):
     series = counter
 #    print "serie length", serieLen
 
-    D = 1 + ((series + unsorted) / serieLen) * lengthN
+    if (genome == solution):
+        D = 0.1
+    else:
+        D = 1 + ((series + unsorted) / serieLen) * lengthN
+    
     return D
 
 
