@@ -101,7 +101,6 @@ def runSimulation(start, solution):
     Returns minumum number of time steps needed to get to solution
     """
     solutionNodes = []
-    lowest = 15
     pare_node = Node(start)
     m = (0, pare_node)
     heappush(queue, m)
@@ -125,20 +124,30 @@ def runSimulation(start, solution):
                 else:
                     heappushpop(queue, l)
 
+    # # print all solutions
+    # for j in range(len(solutionNodes)):
+    #     inversions = 0
+    #     node = solutionNodes[j]
+    #     while((node.prev != None)):
+    #         print "Step", node
+    #         node = node.prev
+    #         inversions += 1
+    #     print "Inversions: ", inversions
+    #     j += 1
 
+    # only print shortest solutions
+    lowest = 50
+    inversions = 0
     for j in range(len(solutionNodes)):
-        inversions = 0
         node = solutionNodes[j]
-        while((node.prev != None)):
+        while((node.prev != None) and (inversions < lowest)):
             print "Step", node
             node = node.prev
             inversions += 1
-        # if ((inversions < lowest) and (node.prev == None)):
-        #     lowest = inversions
-        print "Inversions: ", inversions
+        if (inversions < lowest):
+            lowest = inversions
+            print "Inversions: ", inversions
         j += 1
-    #
-    # print "Start: ", start
 
 # starting points ##############################################################
 start = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
