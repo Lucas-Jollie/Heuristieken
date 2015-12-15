@@ -21,10 +21,10 @@ archive = Trie()
 #TODO adjust: ########################
 beam = 2
 beam1 = 2
-generationsBeam = 10
+generationsBeam = 1
 beam2 = 2
-maxQueue = 50
-maxGenerations = 4
+maxQueue = 5
+maxGenerations = 1
 ######################################
 
 start_time = time.time()

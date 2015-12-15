@@ -9,7 +9,8 @@ results = open("100sorted.txt", 'w')
 
 genes = readGenomes()
 
-for i in range(len(genes)):
+for i in range(2):
+#for i in range(len(genes)):
     for j in range(len(genes[i])): 
         start.append(genes[i][j])
     
