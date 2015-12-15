@@ -27,6 +27,6 @@ for i in range(len(totalSolutions)):
 average = average / len(totalSolutions)
 results.write("\n")
 results.write("Average inversions: ")
-results.write(average)
+results.write(str(average))
 results.write("\n")
 #runSimulation(start, solution)
