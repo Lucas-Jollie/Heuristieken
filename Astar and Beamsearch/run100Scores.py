@@ -1,13 +1,13 @@
 from writeLines import *
 from readLines import readGenomes
-from generationAMixPath import *
+from scoreDefs import * 
 
 start = []
 solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
 totalSolutions = []
 average = 0
 
-results = open("100sorted.txt", 'w')
+results = open("100scores.txt", 'w')
 
 genes = readGenomes()
 
@@ -16,7 +16,7 @@ for i in range(len(genes)):
         start.append(genes[i][j])
 
     writeStart(results, i, start)
-    inversions = runSimulation(start, solution)
+    inversions = generationScore(start, 1)
     totalSolutions.append(inversions)
     writeSolution(results, inversions)
 
@@ -26,7 +26,11 @@ for i in range(len(totalSolutions)):
     average += totalSolutions[i]
 average = average / len(totalSolutions)
 results.write("\n")
-results.write("Average inversions: ")
+results.write("Score: ")
 results.write(str(average))
 results.write("\n")
-#runSimulation(start, solution)
+
+writeStart(results, 100, solution)
+inversions = generationScore(solution, 1)
+totalSolutions.append(inversions)
+writeSolution(results, inversions)

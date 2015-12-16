@@ -19,7 +19,7 @@ queue = []
 archive = Trie()
 
 #TODO adjust: ########################
-beam = 100
+beam = 10
 maxQueue = 50
 maxGenerations = 15
 ######################################
@@ -118,7 +118,7 @@ def runSimulation(start, solution, beam):
                     node = Node(children[i], pare_node[1])
                     nextGeneration.append(node)
 
-        # make a selection of this generation and reset queue for next generation
+        # make a selection of this generation and reset queue for next generation 
         c = selectChildren(nextGeneration, g)
         queue = []
 

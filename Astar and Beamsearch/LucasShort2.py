@@ -84,7 +84,7 @@ def selectChildren(children):
     # calculate "fitness" scores
     for i in range(len(children)):
         print "select", genCount
-        s = generationScore(children[i], genCount)
+        s = totalScore(children[i], genCount)
         scores.append(s)
 
     # check which 3 genomes have the best scores
@@ -121,7 +121,7 @@ def runSimulation(start, solution):
 
         c = selectChildren(children)
         for i in range(len(c)):
-            score = generationScore(c[i], genCount)
+            score = totalScore(c[i], genCount)
             node = Node(c[i], pare_node[1])
             l = (score, node)
             if (len(queue) <= maxqueue):
