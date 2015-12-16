@@ -24,7 +24,7 @@ queue = []
 archive = Trie()
 
 #TODO adjust: ########################
-beam = 3
+beam = 4
 maxqueue = 50
 ######################################
 
@@ -101,12 +101,11 @@ def runSimulation(start, solution):
     Returns minumum number of time steps needed to get to solution
     """
     solutionNodes = []
-    lowest = 15
     pare_node = Node(start)
     m = (0, pare_node)
     heappush(queue, m)
 
-    while (queue != [] and (len(solutionNodes) < 3)):
+    while (queue != [] and (len(solutionNodes) < 2)):
         pare_node = heappop(queue)
         children = generateAllChildren(pare_node[1].cargo)
 
@@ -125,20 +124,30 @@ def runSimulation(start, solution):
                 else:
                     heappushpop(queue, l)
 
+    # # print all solutions
+    # for j in range(len(solutionNodes)):
+    #     inversions = 0
+    #     node = solutionNodes[j]
+    #     while((node.prev != None)):
+    #         print "Step", node
+    #         node = node.prev
+    #         inversions += 1
+    #     print "Inversions: ", inversions
+    #     j += 1
 
+    # only print shortest solutions
+    lowest = 50
+    inversions = 0
     for j in range(len(solutionNodes)):
-        inversions = 0
         node = solutionNodes[j]
-        while((node.prev != None)):
+        while((node.prev != None) and (inversions < lowest)):
             print "Step", node
             node = node.prev
             inversions += 1
-        # if ((inversions < lowest) and (node.prev == None)):
-        #     lowest = inversions
-        print "Inversions: ", inversions
+        if (inversions < lowest):
+            lowest = inversions
+            print "Inversions: ", inversions
         j += 1
-    #
-    # print "Start: ", start
 
 # starting points ##############################################################
 start = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
@@ -166,13 +175,13 @@ solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
 # solution = [1,2,3,4,5,6,7,8,9,10]
 
 ## size: 11 ##
-<<<<<<< HEAD
+
 #start = [4,2,3,1,6,11,10,9,8,7,5]
 #solution = [1,2,3,4,5,6,7,8,9,10,11]
-=======
+
 # start = [4,2,3,1,6,11,10,9,8,7,5]
 # solution = [1,2,3,4,5,6,7,8,9,10,11]
->>>>>>> c371b71dcafffc98495d56a49f3d10bcb2a31065
+
 
 stringsol = copy.copy(solution)
 

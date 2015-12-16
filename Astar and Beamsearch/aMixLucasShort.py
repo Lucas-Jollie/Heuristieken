@@ -16,16 +16,17 @@ import time
 import copy
 import heapq
 from pythontrie import Trie
-from fuckPaardenbloemen import bart
+from scoreDefs import generationScore
 from heapq import *
 
 # initialise
 queue = []
 archive = Trie()
+genCount = 0
 
 #TODO adjust: ########################
 beam = 1
-maxqueue = 50000
+maxqueue = 5
 ######################################
 
 start_time = time.time()
@@ -82,7 +83,8 @@ def selectChildren(children):
     scores = []
     # calculate "fitness" scores
     for i in range(len(children)):
-        s = bart(children[i])
+        print "select", genCount
+        s = generationScore(children[i], genCount)
         scores.append(s)
 
     # check which 3 genomes have the best scores
@@ -109,14 +111,17 @@ def runSimulation(start, solution):
     m = (0, pare_node)
     heappush(queue, m)
     solution_found = False
+    global genCount
 
     while (queue != [] and (solution_found == False)):
+        genCount = genCount + 1
         pare_node = heappop(queue)
         children = generateAllChildren(pare_node[1].cargo)
+        print genCount
 
         c = selectChildren(children)
         for i in range(len(c)):
-            score = bart(c[i])
+            score = generationScore(c[i], genCount)
             node = Node(c[i], pare_node[1])
             l = (score, node)
             if (len(queue) <= maxqueue):

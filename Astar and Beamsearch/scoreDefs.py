@@ -36,7 +36,7 @@ melan = [1, 2, 3, 4, 5]
 #print seriesScore(melan)
 #solution = [1,2,3,4,5]
 
-def bart(genome):
+def generationScore(genome, generation):
 
     if len(genome) == 25:
         solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
@@ -81,12 +81,12 @@ def bart(genome):
 #    print "serie length", serieLen
 
     if (genome == solution):
-        D = 0.1
+        D = 0.1 * generation
     else:
-        D = 1 + ((series + unsorted) / serieLen) * lengthN
+        D = (1 + ((series + unsorted) / serieLen) * lengthN) * generation
     
     return D
 
 
-ans = bart(melan)
+ans = generationScore(melan, 1)
 #print "bart", ans

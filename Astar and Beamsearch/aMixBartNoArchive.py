@@ -3,7 +3,6 @@
 #
 # A mix of beam and astar; uses a priority queue! and doesn't stop when solution found!
 # only prints best solution!
-# TODO: adjust beamwidth (called beam)
 #
 # time and memory checks: http://www.huyng.com/posts/python-performance-analysis/
 # paste:  @profile above the code you want to check
@@ -15,17 +14,15 @@
 import time
 import copy
 import heapq
-from pythontrie import Trie
 from fuckPaardenbloemen import bart
 from heapq import *
 
 # initialise
 queue = []
-archive = Trie()
 
 #TODO adjust: ########################
-beam = 1
-maxqueue = 50000
+beam = 2
+maxqueue = 50
 ######################################
 
 start_time = time.time()
@@ -65,13 +62,7 @@ def generateAllChildren(parent):
                     end -= 1
                 string_parent = copy.copy(temp_parent)
 
-                if (temp_parent == solution):
-                    children.append(temp_parent)
-                    return children
-                elif (archive.search(str(string_parent)) == False):
-                    children.append(temp_parent)
-                    if (str(string_parent) != str(stringsol)):
-                        archive.insert(str(string_parent))
+                children.append(temp_parent)
 
     # print children
     return children
@@ -104,34 +95,42 @@ def runSimulation(start, solution):
     Returns minumum number of time steps needed to get to solution
     """
     solutionNodes = []
-    lowest = 15
     pare_node = Node(start)
+
+    # TODO: make tuple for rootnode (score, generation, genome)?
     m = (0, pare_node)
     heappush(queue, m)
-    solution_found = False
 
-    while (queue != [] and (solution_found == False)):
+    while (queue != [] and (len(solutionNodes) <= 10000)):
         pare_node = heappop(queue)
         children = generateAllChildren(pare_node[1].cargo)
 
         c = selectChildren(children)
         for i in range(len(c)):
-            score = bart(c[i])
+            # create nodes
             node = Node(c[i], pare_node[1])
-            l = (score, node)
-            if (len(queue) <= maxqueue):
-                heappush(queue, l)
-            else:
-                heappushpop(queue, l)
             if (c[i] == solution):
-                print "Solution: ", c[i]
-                solution_found = True
-                inversions = 0
-                while(node.prev != None):
-                    print node
-                    node = node.prev
-                    inversions += 1
-                print "Inversions: ", inversions
+                solutionNodes.append(node)
+            else:
+                score = bart(c[i])
+                l = (score, node)
+                if ((len(queue) <= maxqueue) and (l not in queue)):
+                    heappush(queue, l)
+                else:
+                    heappushpop(queue, l)
+    lowest = 50
+    inversions = 0
+    for j in range(len(solutionNodes)):
+        node = solutionNodes[j]
+        while((node.prev != None) and (inversions < lowest)):
+            print "Step", node
+            node = node.prev
+            inversions += 1
+        if (inversions < lowest):
+            lowest = inversions
+            print "Inversions: ", inversions
+        j += 1
+
 
 
 # starting points ##############################################################
@@ -140,7 +139,7 @@ solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
 
 # start = [2,1,4,3]
 # solution = [1,2,3,4]
-
+#
 # start = [1,2,3,5,6,4]
 # solution = [1,2,3,4,5,6]
 
@@ -148,8 +147,8 @@ solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
 # solution = [1,2,3,4,5,6,7]
 
 ## size: 8 ##
-#start = [4,2,3,1,6,8,7,5]
-#solution = [1,2,3,4,5,6,7,8]
+# start = [4,2,3,1,6,8,7,5]
+# solution = [1,2,3,4,5,6,7,8]
 
 ## size: 9 ##
 # start = [1,2,3,4,6,8,9,7,5]
@@ -160,6 +159,9 @@ solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
 # solution = [1,2,3,4,5,6,7,8,9,10]
 
 ## size: 11 ##
+# start = [4,2,3,1,6,11,10,9,8,7,5]
+# solution = [1,2,3,4,5,6,7,8,9,10,11]
+
 # start = [4,2,3,1,6,11,10,9,8,7,5]
 # solution = [1,2,3,4,5,6,7,8,9,10,11]
 

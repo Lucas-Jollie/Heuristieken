@@ -3,7 +3,6 @@
 #
 # A mix of beam and astar; uses a priority queue! and doesn't stop when solution found!
 # only prints best solution!
-# TODO: adjust beamwidth (called beam)
 #
 # time and memory checks: http://www.huyng.com/posts/python-performance-analysis/
 # paste:  @profile above the code you want to check
@@ -22,6 +21,7 @@ from heapq import *
 # initialise
 queue = []
 archive = Trie()
+totalDistance = 0
 
 #TODO adjust: ########################
 beam = 3
@@ -57,6 +57,7 @@ def generateAllChildren(parent):
             if i != j:
                 begin = copy.copy(i)
                 end = copy.copy(j)
+                
                 while begin < end:
                     temp = temp_parent[end]
                     temp_parent[end] = temp_parent[begin]
@@ -101,7 +102,6 @@ def runSimulation(start, solution):
     Returns minumum number of time steps needed to get to solution
     """
     solutionNodes = []
-    lowest = 15
     pare_node = Node(start)
     m = (0, pare_node)
     heappush(queue, m)
@@ -126,6 +126,8 @@ def runSimulation(start, solution):
                 else:
                     heappushpop(queue, l)
 
+    # only print shortest solutions
+    lowest = 50
     inversions = 0
     for j in range(len(solutionNodes)):
         node = solutionNodes[j]
@@ -133,12 +135,10 @@ def runSimulation(start, solution):
             print "Step", node
             node = node.prev
             inversions += 1
-        if ((inversions < lowest) and (node.prev == None)):
+        if (inversions < lowest):
             lowest = inversions
             print "Inversions: ", inversions
         j += 1
-
-    print "Start: ", start
 
 # starting points ##############################################################
 # start = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
