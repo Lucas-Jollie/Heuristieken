@@ -19,7 +19,7 @@ queue = []
 archive = Trie()
 
 #TODO adjust: ########################
-beam = 100
+beam = 20
 maxQueue = 50
 maxGenerations = 15
 ######################################
@@ -59,7 +59,10 @@ def generateAllChildren(parent):
                     begin += 1
                     end -= 1
                 string_parent = copy.copy(temp_parent)
-                children.append(temp_parent)
+                if (archive.search(str(string_parent)) == False):
+                    children.append(temp_parent)
+                    if (str(string_parent) != str(stringsol)):
+                        archive.insert(str(string_parent))
 
     return children
 
@@ -161,15 +164,15 @@ solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
 # start = [2,1,4,3]
 # solution = [1,2,3,4]
 
-## size: 6 ## ideal beam = 50
+# size: 6 ## ideal beam = 50
 # start = [1,2,3,5,6,4]
 # solution = [1,2,3,4,5,6]
 
-## size: 7 ## ideal beam = 25
+## size: 7 ## ideal beam = 25 without archive, 50 with archive
 # start = [1,2,7,3,5,6,4]
 # solution = [1,2,3,4,5,6,7]
 
-## size: 8 ## ideal beam = 120
+## size: 8 ## ideal beam = 120 without archive, 100 with archive
 # start = [4,2,3,1,6,8,7,5]
 # solution = [1,2,3,4,5,6,7,8]
 
@@ -190,11 +193,16 @@ solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
 
 stringsol = copy.copy(solution)
 
-counter = 0
-while (beam < 10000):
-    print "run:", counter
-    print "beam:", beam
-    runSimulation(start, solution, beam)
-    print "---", (time.time() - start_time), "seconds ---"
-    counter += 1
-    beam += 20
+runSimulation(start, solution, beam)
+print "---", (time.time() - start_time), "seconds ---"
+
+# # runs to find a good beam
+# counter = 0
+# while (beam < 10000):
+#     print "run:", counter
+#     print "beam:", beam
+#     runSimulation(start, solution, beam)
+#     print "---", (time.time() - start_time), "seconds ---"
+#     # TODO: clear all nodes!!
+#     counter += 1
+#     beam += 20
