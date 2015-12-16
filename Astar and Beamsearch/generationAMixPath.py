@@ -19,9 +19,9 @@ queue = []
 archive = Trie()
 
 #TODO adjust: ########################
-beam = 1000
+beam = 100
 maxQueue = 50
-maxGenerations = 30
+maxGenerations = 15
 ######################################
 
 start_time = time.time()
@@ -64,11 +64,12 @@ def generateAllChildren(parent):
     return children
 
 def selectChildren(childrennodes, g):
-
+    # temporary lists needed for sorting the nodes according to their score
     scores = []
     children = []
     genomes = []
-    # calculate "fitness" scores
+
+    # calculate "fitness" scores and filter out double genomes
     for i in range(len(childrennodes)):
         if (childrennodes[i].cargo not in genomes):
             s = generationScore(childrennodes[i].cargo, g)
@@ -76,10 +77,10 @@ def selectChildren(childrennodes, g):
             children.append(childrennodes[i])
             genomes.append(childrennodes[i].cargo)
 
-    # check which 3 genomes have the best scores
+    # check which (beamwidth number of) genomes have the best scores
     dictionary = heapq.nsmallest(beam, zip(scores, children))
 
-    # put the best genomes in a list before returning
+    # put the best genome nodes in a list before returning
     best_children = []
     for j in range(len(dictionary)):
         best_children.append(dictionary[j][1])
@@ -89,7 +90,7 @@ def selectChildren(childrennodes, g):
     return best_children
 
 # algorithm
-def runSimulation(start, solution):
+def runSimulation(start, solution, beam):
     """
     Returns minumum number of time steps needed to get to solution
     """
@@ -107,6 +108,7 @@ def runSimulation(start, solution):
         nextGeneration = []
         g += 1
 
+        # make a bunch of children from the selected parents and add them to the graph
         for b in range(beam):
             if (queue != []):
                 pare_node = heappop(queue)
@@ -116,10 +118,12 @@ def runSimulation(start, solution):
                     node = Node(children[i], pare_node[1])
                     nextGeneration.append(node)
 
+        # make a selection of this generation and reset queue for next generation
         c = selectChildren(nextGeneration, g)
-        # reset queue and nextGeneration
         queue = []
 
+        # check selection for the solution or else use them as parents
+        # to make the next generation
         for i in range(len(c)):
             if (c[i].cargo == solution):
                 solution_found = True
@@ -153,24 +157,27 @@ def runSimulation(start, solution):
 start = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
 solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
 
+## size: 4 ## ideal beam = at least 4 to 50
 # start = [2,1,4,3]
 # solution = [1,2,3,4]
 
+## size: 6 ## ideal beam = 50
 # start = [1,2,3,5,6,4]
 # solution = [1,2,3,4,5,6]
 
+## size: 7 ## ideal beam = 25
 # start = [1,2,7,3,5,6,4]
 # solution = [1,2,3,4,5,6,7]
 
-## size: 8 ##
+## size: 8 ## ideal beam = 120
 # start = [4,2,3,1,6,8,7,5]
 # solution = [1,2,3,4,5,6,7,8]
 
-## size: 9 ##
+## size: 9 ## ideal beam = 120
 # start = [1,2,3,4,6,8,9,7,5]
 # solution = [1,2,3,4,5,6,7,8,9]
 
-## size: 10 ##
+## size: 10 ## ideal beam = 90 or 95
 # start = [4,2,3,1,10,6,8,9,7,5]
 # solution = [1,2,3,4,5,6,7,8,9,10]
 
@@ -183,5 +190,11 @@ solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
 
 stringsol = copy.copy(solution)
 
-runSimulation(start, solution)
-print "---", (time.time() - start_time), "seconds ---"
+counter = 0
+while (beam < 10000):
+    print "run:", counter
+    print "beam:", beam
+    runSimulation(start, solution, beam)
+    print "---", (time.time() - start_time), "seconds ---"
+    counter += 1
+    beam += 20
