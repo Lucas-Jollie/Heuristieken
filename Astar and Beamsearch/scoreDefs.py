@@ -12,7 +12,7 @@ def totalScore(genome, gen):
 #    print "c", c
     if c == 0:
         return a
-    
+
     return float(a * (b / c))
 
 melan = [1, 2, 3, 4, 5]
@@ -79,4 +79,4 @@ def generationScore(genome, generation):
 
 
 ans = totalScore(melan, 1)
-print "bart", ans
+# print "bart", ans
