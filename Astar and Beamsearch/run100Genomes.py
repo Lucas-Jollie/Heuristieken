@@ -11,14 +11,8 @@ results = open("100sorted.txt", 'w')
 
 genes = readGenomes()
 
-<<<<<<< HEAD
-for i in range(2):
-#for i in range(len(genes)):
-    for j in range(len(genes[i])): 
-=======
 for i in range(len(genes)):
     for j in range(len(genes[i])):
->>>>>>> 80e6dfec886051139b25c57c797b4c20260b954b
         start.append(genes[i][j])
 
     writeStart(results, i, start)
@@ -33,6 +27,6 @@ for i in range(len(totalSolutions)):
 average = average / len(totalSolutions)
 results.write("\n")
 results.write("Average inversions: ")
-results.write(average)
+results.write(str(average))
 results.write("\n")
 #runSimulation(start, solution)

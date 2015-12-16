@@ -22,7 +22,7 @@ queue = []
 
 #TODO adjust: ########################
 beam = 2
-maxqueue = 50
+maxqueue = 100
 ######################################
 
 start_time = time.time()

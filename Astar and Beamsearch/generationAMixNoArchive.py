@@ -3,7 +3,7 @@
 #
 # A mix of beam and astar; uses a priority queue! and doesn't stop when solution found!
 # only prints best solution!
-# loops through the generations instead of just the priority queue
+# loops through the generations AND CLEARS PRIORITY QUEUE!! :)
 # -------------------------------------------------------------------------------
 
 # imports
@@ -12,9 +12,6 @@ import copy
 import heapq
 from scoreDefs import generationScore
 from heapq import *
-
-# initialise
-queue = []
 
 #TODO adjust: ########################
 beam = 50
@@ -91,6 +88,7 @@ def runSimulation(start, solution):
     Returns minumum number of time steps needed to get to solution
     """
     solutionNodes = []
+    queue = []
     g = 0
     solution_found = False
 
@@ -100,7 +98,6 @@ def runSimulation(start, solution):
 
     while ((queue != []) and (g <= maxGenerations) and (solution_found == False)):
         print "--- Computing generation", g, "---"
-        print "Queue length ", len(queue)
         nextGeneration = []
         g += 1
         if (g < generationsBeam):
@@ -119,6 +116,7 @@ def runSimulation(start, solution):
                         nextGeneration.append(children[i])
 
         c = selectChildren(nextGeneration, g)
+        queue = []
         for i in range(len(c)):
             # create nodes
             node = Node(c[i], pare_node[1])

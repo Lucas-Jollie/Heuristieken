@@ -84,7 +84,7 @@ def generationScore(genome, generation):
         D = 0.1 * generation
     else:
         D = (1 + ((series + unsorted) / serieLen) * lengthN) * generation
-    
+
     return D
 
 

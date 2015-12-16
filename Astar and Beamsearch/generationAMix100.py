@@ -13,25 +13,21 @@ import heapq
 from scoreDefs import generationScore
 from heapq import *
 
-# initialise
-queue = []
+
 
 #TODO adjust: ########################
-<<<<<<< HEAD
 beam = 2
 beam1 = 2
 generationsBeam = 1
 beam2 = 2
 maxQueue = 5
 maxGenerations = 1
-=======
 beam = 5
 beam1 = 5
 generationsBeam = 10
 beam2 = 5
 maxQueue = 50
 maxGenerations = 25
->>>>>>> 80e6dfec886051139b25c57c797b4c20260b954b
 ######################################
 
 start_time = time.time()
@@ -104,6 +100,7 @@ def runSimulation(start, solution):
     str(stringsol)
     nextGeneration = []
     solutionNodes = []
+    queue = []
     g = 0
     result = 5000
     solution_found = False
@@ -132,6 +129,7 @@ def runSimulation(start, solution):
                         nextGeneration.append(children[i])
 
         c = selectChildren(nextGeneration, g)
+        queue = []
         for i in range(len(c)):
             # create nodes
             node = Node(c[i], pare_node[1])

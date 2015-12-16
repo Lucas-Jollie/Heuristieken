@@ -19,12 +19,9 @@ queue = []
 archive = Trie()
 
 #TODO adjust: ########################
-beam = 10
-beam1 = 10
-generationsBeam = 5
-beam2 = 8
+beam = 20
 maxQueue = 50
-maxGenerations = 10
+maxGenerations = 15
 ######################################
 
 start_time = time.time()
@@ -62,26 +59,31 @@ def generateAllChildren(parent):
                     begin += 1
                     end -= 1
                 string_parent = copy.copy(temp_parent)
-
                 if (archive.search(str(string_parent)) == False):
                     children.append(temp_parent)
-                    if ((str(string_parent) != str(stringsol))):
+                    if (str(string_parent) != str(stringsol)):
                         archive.insert(str(string_parent))
 
     return children
 
 def selectChildren(childrennodes, g):
-
+    # temporary lists needed for sorting the nodes according to their score
     scores = []
-    # calculate "fitness" scores
+    children = []
+    genomes = []
+
+    # calculate "fitness" scores and filter out double genomes
     for i in range(len(childrennodes)):
-        s = generationScore(childrennodes[i].cargo, g)
-        scores.append(s)
+        if (childrennodes[i].cargo not in genomes):
+            s = generationScore(childrennodes[i].cargo, g)
+            scores.append(s)
+            children.append(childrennodes[i])
+            genomes.append(childrennodes[i].cargo)
 
-    # check which 3 genomes have the best scores
-    dictionary = heapq.nsmallest(beam, zip(scores, childrennodes))
+    # check which (beamwidth number of) genomes have the best scores
+    dictionary = heapq.nsmallest(beam, zip(scores, children))
 
-    # put the best genomes in a list before returning
+    # put the best genome nodes in a list before returning
     best_children = []
     for j in range(len(dictionary)):
         best_children.append(dictionary[j][1])
@@ -91,11 +93,12 @@ def selectChildren(childrennodes, g):
     return best_children
 
 # algorithm
-def runSimulation(start, solution):
+def runSimulation(start, solution, beam):
     """
     Returns minumum number of time steps needed to get to solution
     """
     solutionNodes = []
+    queue = []
     g = 0
     solution_found = False
 
@@ -103,36 +106,36 @@ def runSimulation(start, solution):
     m = (0, pare_node)
     heappush(queue, m)
 
-    while ((queue != []) and (g <= maxGenerations)):
-        nextGeneration = []
+    while ((queue != []) and (g <= maxGenerations) and (solution_found == False)):
         print "--- Computing generation", g, "---"
+        nextGeneration = []
         g += 1
-        if (g < generationsBeam):
-            for b in range(beam1):
-                if (queue != []):
-                    pare_node = heappop(queue)
-                    children = generateAllChildren(pare_node[1].cargo)
-                    for i in range(len(children)):
-                        # create nodes
-                        node = Node(children[i], pare_node[1])
-                        nextGeneration.append(node)
-        else:
-            for b in range(beam2):
-                if (queue != []):
-                    pare_node = heappop(queue)
-                    children = generateAllChildren(pare_node[1].cargo)
-                    for i in range(len(children)):
-                        node = Node(children[i], pare_node[1])
-                        nextGeneration.append(node)
 
+        # make a bunch of children from the selected parents and add them to the graph
+        for b in range(beam):
+            if (queue != []):
+                pare_node = heappop(queue)
+                children = generateAllChildren(pare_node[1].cargo)
+                for i in range(len(children)):
+                    # create nodes
+                    node = Node(children[i], pare_node[1])
+                    nextGeneration.append(node)
+
+        # make a selection of this generation and reset queue for next generation
         c = selectChildren(nextGeneration, g)
+        queue = []
+
+        # check selection for the solution or else use them as parents
+        # to make the next generation
         for i in range(len(c)):
-            if (c[i] == solution):
-                solutionNodes.append(node)
+            if (c[i].cargo == solution):
+                solution_found = True
+                solutionNodes.append(c[i])
                 print "Solutions found:", len(solutionNodes)
+                break
             else:
-                score = generationScore(c[i], g)
-                l = (score, node)
+                score = generationScore(c[i].cargo, g)
+                l = (score, c[i])
                 if (len(queue) <= maxQueue):
                     heappush(queue, l)
                 else:
@@ -154,27 +157,30 @@ def runSimulation(start, solution):
         j += 1
 
 # starting points ##############################################################
-# start = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
-# solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
+start = [23,1,2,11,24,22,19,6,10,7,25,20,5,8,18,12,13,14,15,16,17,21,3,4,9]
+solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
 
+## size: 4 ## ideal beam = at least 4 to 50
 # start = [2,1,4,3]
 # solution = [1,2,3,4]
 
+# size: 6 ## ideal beam = 50
 # start = [1,2,3,5,6,4]
 # solution = [1,2,3,4,5,6]
 
+## size: 7 ## ideal beam = 25 without archive, 50 with archive
 # start = [1,2,7,3,5,6,4]
 # solution = [1,2,3,4,5,6,7]
 
-## size: 8 ##
-start = [4,2,3,1,6,8,7,5]
-solution = [1,2,3,4,5,6,7,8]
+## size: 8 ## ideal beam = 120 without archive, 100 with archive
+# start = [4,2,3,1,6,8,7,5]
+# solution = [1,2,3,4,5,6,7,8]
 
-## size: 9 ##
+## size: 9 ## ideal beam = 120
 # start = [1,2,3,4,6,8,9,7,5]
 # solution = [1,2,3,4,5,6,7,8,9]
 
-## size: 10 ##
+## size: 10 ## ideal beam = 90 or 95
 # start = [4,2,3,1,10,6,8,9,7,5]
 # solution = [1,2,3,4,5,6,7,8,9,10]
 
@@ -187,5 +193,16 @@ solution = [1,2,3,4,5,6,7,8]
 
 stringsol = copy.copy(solution)
 
-runSimulation(start, solution)
+runSimulation(start, solution, beam)
 print "---", (time.time() - start_time), "seconds ---"
+
+# # runs to find a good beam
+# counter = 0
+# while (beam < 10000):
+#     print "run:", counter
+#     print "beam:", beam
+#     runSimulation(start, solution, beam)
+#     print "---", (time.time() - start_time), "seconds ---"
+#     # TODO: clear all nodes!!
+#     counter += 1
+#     beam += 20
