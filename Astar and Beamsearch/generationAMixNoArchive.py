@@ -13,12 +13,12 @@ import heapq
 from scoreDefs import generationScore
 from heapq import *
 
-#TODO adjust: ########################
-beam = 50
-beam1 = 500
+#TODO adjust: ######################## beam is best between 30 and 50
+beam = 200
+beam1 = 10000
 generationsBeam = 10
-beam2 = 350
-maxQueue = 50
+beam2 = 5000
+maxQueue = 200
 maxGenerations = 16
 ######################################
 
