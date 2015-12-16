@@ -1,0 +1,94 @@
+[33mcommit 5763d75741416d4d6216f4479ca62c15ba75145d[m
+Author: terschure <anneke.terschure@student.uva.nl>
+Date:   Tue Dec 15 10:07:15 2015 +0100
+
+    confusing merge forced by git
+
+[33mcommit 3b97f3fd8e6636cc4765b2b3302f302e41853d0b[m
+Merge: 1f55a63 f6fed70
+Author: terschure <anneke.terschure@student.uva.nl>
+Date:   Mon Dec 14 21:18:27 2015 +0100
+
+    Merge branch 'master' of https://github.com/Lucas-Jollie/Heuristieken
+
+[33mcommit 1f55a63f5d7230cf0c799f0fed00613224a5b25d[m
+Author: terschure <anneke.terschure@student.uva.nl>
+Date:   Mon Dec 14 21:17:45 2015 +0100
+
+    played with some settings
+
+[33mcommit f6fed708fb5ef10fd7fbb101425d91943d7b0f51[m
+Merge: 92a30ff c371b71
+Author: Lucas-Jollie <lucas_jollie@outlook.com>
+Date:   Mon Dec 14 11:53:49 2015 -0500
+
+    sddfs
+
+[33mcommit 92a30ff121ef4aa8c98e455a9fa43c0b81d30a8b[m
+Author: Lucas-Jollie <lucas_jollie@outlook.com>
+Date:   Mon Dec 14 11:47:59 2015 -0500
+
+    asdf
+
+[33mcommit c371b71dcafffc98495d56a49f3d10bcb2a31065[m
+Author: terschure <anneke.terschure@student.uva.nl>
+Date:   Mon Dec 14 17:46:59 2015 +0100
+
+    working mix for our genome!!! :)
+
+[33mcommit 5f481a2e09bdc2b66b22e45e63d624419ff38c46[m
+Merge: 678e645 0c084eb
+Author: terschure <anneke.terschure@student.uva.nl>
+Date:   Mon Dec 14 16:48:29 2015 +0100
+
+    onzin2
+
+[33mcommit 678e645ab1f17aabe60a098986052ba27aa17993[m
+Author: terschure <anneke.terschure@student.uva.nl>
+Date:   Mon Dec 14 16:42:43 2015 +0100
+
+    onzin
+
+[33mcommit f44eec3a67216b3950f0817c45d67d03a516941b[m
+Merge: 6769357 faf2866
+Author: terschure <anneke.terschure@student.uva.nl>
+Date:   Mon Dec 14 16:01:18 2015 +0100
+
+    Merge branch 'master' of https://github.com/Lucas-Jollie/Heuristieken
+
+[33mcommit 67693571dca3bb2e7b426deaa3d4004c35900754[m
+Author: terschure <anneke.terschure@student.uva.nl>
+Date:   Mon Dec 14 16:00:41 2015 +0100
+
+    working endless
+
+[33mcommit 1ee20da2728243f8774fa433778dd1f2feff4c17[m
+Author: terschure <anneke.terschure@student.uva.nl>
+Date:   Mon Dec 14 15:23:09 2015 +0100
+
+    endless searchmix
+
+[33mcommit 0c084eb47ca02d766e50caf53731b2ec93800bfe[m
+Author: Lucas-Jollie <lucas_jollie@outlook.com>
+Date:   Mon Dec 14 04:04:39 2015 -0500
+
+    turned off prints
+
+[33mcommit 856415cd76f6ca664adb9352606dc17c592c10d1[m
+Author: Lucas-Jollie <lucas_jollie@outlook.com>
+Date:   Mon Dec 14 03:53:42 2015 -0500
+
+    bart functie ingebouwd en is werkend
+
+[33mcommit a37f9d0c61e2652bd1144d988c79d5d9aee6447a[m
+Merge: 9ff4bb4 f44eec3
+Author: Lucas-Jollie <lucas_jollie@outlook.com>
+Date:   Mon Dec 14 03:27:29 2015 -0500
+
+    Merge branch 'master' of http://www.github.com/Lucas-Jollie/Heuristieken
+
+[33mcommit 9ff4bb42b71278841564003deb447349cafc7870[m
+Author: Lucas-Jollie <lucas_jollie@outlook.com>
+Date:   Mon Dec 14 03:27:15 2015 -0500
+
+    bart functie werkt
